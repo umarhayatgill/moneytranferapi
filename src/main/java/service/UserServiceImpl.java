@@ -1,27 +1,33 @@
 package service;
 
+import dao.UserDao;
+import dao.UserDaoImpl;
 import model.User;
 
 import java.util.List;
 
+
+
 public class UserServiceImpl implements UserService {
+    private UserDao userDao = UserDaoImpl.getInstance();
+
     @Override
     public List<User> getAllUsers() {
-        return null;
+        return userDao.getAllUsers();
     }
 
     @Override
-    public User getUser(String id) {
-        return null;
+    public User getUser(String emailId) throws Exception {
+        return userDao.getUser(emailId);
     }
 
     @Override
-    public User createUser(String name, String email) {
-        return null;
+    public User createUser(String name, String emailId) throws Exception {
+        return userDao.createUser(name, emailId);
     }
 
     @Override
-    public User updateUser(String id, String name, String email) {
+    public User updateUser(String name, String emailId) {
         return null;
     }
 }

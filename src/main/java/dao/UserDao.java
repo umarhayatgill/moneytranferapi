@@ -1,10 +1,10 @@
-package service;
+package dao;
 
 import model.User;
 
 import java.util.List;
 
-public interface UserService {
+public interface UserDao {
     // returns a list of all users
     public List<User> getAllUsers();
 

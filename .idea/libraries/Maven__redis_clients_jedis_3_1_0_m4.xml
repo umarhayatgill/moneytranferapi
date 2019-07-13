@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: redis.clients:jedis:3.1.0-m4">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/redis/clients/jedis/3.1.0-m4/jedis-3.1.0-m4.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/redis/clients/jedis/3.1.0-m4/jedis-3.1.0-m4-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/redis/clients/jedis/3.1.0-m4/jedis-3.1.0-m4-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

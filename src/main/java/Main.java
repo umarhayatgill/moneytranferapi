@@ -1,7 +1,13 @@
+import controller.UserController;
+import service.UserServiceImpl;
+
 import static spark.Spark.*;
 
 public class Main {
     public static void main(String[] args) {
-        get("/hello", (req, res) -> "Hello World");
+        after((req, res) -> {
+            res.type("application/json");
+        });
+        new UserController(new UserServiceImpl());
     }
 }
