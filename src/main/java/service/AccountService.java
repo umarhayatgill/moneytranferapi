@@ -1,10 +1,13 @@
 package service;
 
-import exception.NotSufficientBalance;
+import exception.NotFoundException;
+import exception.NotSufficientBalanceException;
 import model.Account;
 
-import java.math.BigDecimal;
+import java.util.List;
 
 public interface AccountService {
-    public void makePayment(Account transferFrom, Account transferTo, BigDecimal amountToTransfer) throws NotSufficientBalance;
+    public Account getAccount(String accountId);
+    public List<Account> getAllAccounts();
+    public void makePayment(String transferFrom, String transferTo, String amountToTransfer) throws NotSufficientBalanceException, NotFoundException;
 }

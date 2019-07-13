@@ -1,10 +1,10 @@
 package controller;
 
+import exception.NotSufficientBalanceException;
 import helper.ResponseError;
+import helper.ResponseSuccess;
 import model.Account;
-import model.User;
 import service.AccountService;
-import service.UserService;
 
 import static helper.JsonUtil.json;
 import static spark.Spark.get;
@@ -25,18 +25,22 @@ public class AccountController {
             }
         }, json());
 
-        post("/moneytransfer", (req, res) -> {
-            String fromAccountId = req.params("fromAccountId");
-            String toAccountId = req.params("toAccountId");
+        post("/moneytransfer", (req, res) ->
+        {
             try {
-                Account fromAccount = accountService.getAccount(fromAccountId);
-                Account toAccount = accountService.getAccount(toAccountId);
-                accountService
-            }catch (Exception ex) {
+                String fromAccountId = req.queryParams("fromAccountId");
+                String toAccountId = req.queryParams("toAccountId");
+                String amountToTransfer = req.queryParams("amountToTransfer");
+                accountService.makePayment(fromAccountId, toAccountId, amountToTransfer);
+                res.status(200);
+                return new ResponseSuccess("Money has been transferred successfully");
+            }catch (NotSufficientBalanceException exception){
                 res.status(400);
-                return new ResponseError("No account with id %s found", id);
+                return new ResponseError("Your account does not have sufficient balance");
             }
         }, json());
+
+
 
     }
 }

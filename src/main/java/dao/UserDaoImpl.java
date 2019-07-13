@@ -7,7 +7,6 @@ import java.util.List;
 
 public class UserDaoImpl implements UserDao {
     private static UserDaoImpl userDaoImpl = null;
-
     User user;
     List<User> list = new ArrayList<>();
     public UserDaoImpl(){
