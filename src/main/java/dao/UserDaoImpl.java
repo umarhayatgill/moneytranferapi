@@ -1,5 +1,7 @@
 package dao;
 
+import exception.AlreadyExistException;
+import exception.NotFoundException;
 import model.User;
 
 import java.util.ArrayList;
@@ -10,6 +12,7 @@ public class UserDaoImpl implements UserDao {
     User user;
     List<User> list = new ArrayList<>();
     public UserDaoImpl(){
+        //in memort database for the sake of simplicity of task
         user = new User();
         user.setEmail("firstuser@abc.com");
         user.setName("firstuser");
@@ -17,6 +20,10 @@ public class UserDaoImpl implements UserDao {
         user = new User();
         user.setEmail("seconduser@abc.com");
         user.setName("seconduser");
+        list.add(user);
+        user = new User();
+        user.setEmail("john@foobar.com");
+        user.setName("john");
         list.add(user);
     }
 
@@ -36,14 +43,14 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User getUser(String emailId) throws Exception {
-        return list.stream().findAny().filter(user -> user.getEmail().equals(emailId))
+        return list.stream().filter(user -> user.getEmail().equals(emailId)).findFirst()
                 .orElseThrow(() -> new Exception("User not found"));
     }
 
     @Override
     public User createUser(String name, String emailId) throws Exception {
         if(list.stream().anyMatch(user -> user.getEmail().trim().equals(emailId))){
-            throw new Exception("User already exists");
+            throw new AlreadyExistException("User already exists");
         }else {
             user = new User();
             user.setName(name);
@@ -54,7 +61,16 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User updateUser(String name, String emailId) {
-        return null;
+    public User updateUser(String name, String emailId) throws NotFoundException {
+        if(list.stream().anyMatch(user -> user.getEmail().trim().equals(emailId))){
+            list.remove(user);
+            user = new User();
+            user.setName(name);
+            user.setEmail(emailId);
+            list.add(user);
+        }else {
+            throw new NotFoundException("User with this email id does not exists");
+        }
+        return user;
     }
 }

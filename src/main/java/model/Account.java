@@ -10,7 +10,7 @@ import java.util.Currency;
 public class Account {
     private String accountID;
     private User user;
-    private BigDecimal balance;
+    private volatile BigDecimal balance; //volatile to make sure it works correctly in multithreaded context
     private Currency currency;
 
     public String getAccountID() {

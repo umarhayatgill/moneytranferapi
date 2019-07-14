@@ -1,5 +1,6 @@
 package dao;
 
+import exception.NotFoundException;
 import model.User;
 
 import java.util.List;
@@ -15,5 +16,5 @@ public interface UserDao {
     public User createUser(String name, String emailId) throws Exception;
 
     // updates an existing user
-    public User updateUser(String name, String emailId);
+    public User updateUser(String name, String emailId) throws NotFoundException;
 }

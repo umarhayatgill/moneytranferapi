@@ -38,7 +38,7 @@ public class AccountDaoImpl implements AccountDao {
 
     @Override
     public Account getAccount(String accountId) throws NotFoundException {
-        return list.stream().findAny().filter(account -> account.getAccountID().equals(accountId))
+        return list.stream().filter(account -> account.getAccountID().equals(accountId)).findFirst()
                 .orElseThrow(() -> new NotFoundException("Account number %s not found"));
     }
 

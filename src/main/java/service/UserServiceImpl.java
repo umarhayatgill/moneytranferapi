@@ -2,6 +2,7 @@ package service;
 
 import dao.UserDao;
 import dao.UserDaoImpl;
+import exception.NotFoundException;
 import model.User;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(String name, String emailId) {
-        return null;
+    public User updateUser(String name, String emailId) throws NotFoundException {
+        return userDao.updateUser(name, emailId);
     }
 }

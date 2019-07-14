@@ -1,5 +1,6 @@
 package controller;
 
+import exception.NotFoundException;
 import exception.NotSufficientBalanceException;
 import helper.ResponseError;
 import helper.ResponseSuccess;
@@ -37,6 +38,9 @@ public class AccountController {
             }catch (NotSufficientBalanceException exception){
                 res.status(400);
                 return new ResponseError("Your account does not have sufficient balance");
+            }catch (NotFoundException exception){
+                res.status(400);
+                return new ResponseError("Account details are not valid");
             }
         }, json());
 
