@@ -11,7 +11,7 @@ import java.util.Map;
 public class UserDaoImpl implements UserDao {
     private static UserDaoImpl userDaoImpl = null;
     User user;
-    Map<String, User> usersDatabase = new HashMap<>();
+    Map<String, User> usersDatabase = new HashMap<String, User>();
     public UserDaoImpl(){
         //in memory database for the sake of simplicity of task
         user = User.builder().withId("1").withFirstName("foo")

@@ -7,11 +7,8 @@ import helper.ResponseSuccess;
 import model.User;
 import service.UserService;
 
-import static spark.Spark.*;
 import static helper.JsonUtil.json;
-
-import com.google.gson.Gson;
-import com.google.inject.Inject;
+import static spark.Spark.*;
 
 public class UserController {
    public UserController(final UserService userService) {
@@ -19,7 +16,7 @@ public class UserController {
         get("/users", (req, res) -> userService.getAllUsers(), json()); //get list of all users
 
        //get user with given id
-       get("/users/:id", (req, res) -> {
+       get("/user/:id", (req, res) -> {
            String id = req.params(":id");
            try {
                User user = userService.getUser(id);
@@ -31,7 +28,7 @@ public class UserController {
        }, json());
 
         //add a user
-        post("/users/:id", (req, res) -> {
+        post("/user/:id", (req, res) -> {
             String userId = req.params(":id");
             try {
                 User user = new User.Builder().withId(userId).withFirstName(req.queryParams("firstName"))
@@ -46,7 +43,7 @@ public class UserController {
         } , json());
 
         //edit a particular user
-        put("/users/:id", (req, res) -> {
+        put("/user/:id", (req, res) -> {
             String userId = req.params(":id");
             try {
                 User user = new User.Builder().withId(userId).withFirstName(req.queryParams("firstName"))
@@ -59,7 +56,7 @@ public class UserController {
         } , json());
 
         //check whether a user exists with given id
-       options("/users/:id", (req, res) -> {
+       options("/user/:id", (req, res) -> {
            String userId = req.params(":id");
            boolean userExist = userService.userExist(userId);
            res.status(200);
@@ -67,13 +64,14 @@ public class UserController {
        } , json());
 
        //delete a particular user
-       delete("/users/:id", (req, res) -> {
+       delete("/user/:id", (req, res) -> {
            String userId = req.params(":id");
            try {
                userService.deleteUser(userId);
                res.status(200);
                return new ResponseSuccess("User with %s id has been deleted", userId);
            }catch (Exception ex) {
+               res.status(400);
                return new ResponseError("User with %s id does not exist", userId);
            }
        } , json());

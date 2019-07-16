@@ -17,6 +17,16 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public BigDecimal getAccountBalance(String accoundId) throws NotFoundException {
+        return accountDao.getAccountBalance(accoundId);
+    }
+
+    @Override
+    public void deleteAccount(String accoundId) throws NotFoundException {
+        accountDao.deleteAccount(accoundId);
+    }
+
+    @Override
     public List<Account> getAllAccounts() {
         return accountDao.getAllAccounts();
     }

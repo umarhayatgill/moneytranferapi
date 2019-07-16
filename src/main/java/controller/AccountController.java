@@ -8,14 +8,13 @@ import model.Account;
 import service.AccountService;
 
 import static helper.JsonUtil.json;
-import static spark.Spark.get;
-import static spark.Spark.post;
+import static spark.Spark.*;
 
 public class AccountController {
     public AccountController(final AccountService accountService) {
         get("/accounts", (req, res) -> accountService.getAllAccounts(), json());
 
-        get("/accounts/:id", (req, res) -> {
+        get("/account/:id", (req, res) -> {
             String id = req.params(":id");
             try {
                 Account account = accountService.getAccount(id);
@@ -25,6 +24,29 @@ public class AccountController {
                 return new ResponseError("No account with id %s found", id);
             }
         }, json());
+
+        get("/account/:id/balance", (req, res) -> {
+            String id = req.params(":id");
+            try {
+                return accountService.getAccountBalance(id);
+            }catch (Exception ex) {
+                res.status(400);
+                return new ResponseError("No account with id %s found", id);
+            }
+        }, json());
+
+        //delete a particular user
+        delete("/user/:id", (req, res) -> {
+            String userId = req.params(":id");
+            try {
+                accountService.deleteAccount(userId);
+                res.status(200);
+                return new ResponseSuccess("Account with %s id has been deleted", userId);
+            }catch (Exception ex) {
+                res.status(400);
+                return new ResponseError("Account with %s id does not exist", userId);
+            }
+        } , json());
 
         post("/moneytransfer", (req, res) ->
         {

@@ -23,18 +23,19 @@ Few example calls are given below.
 
 HTTP METHOD | PATH | USAGE
 --- | --- | ---
-GET| /users | Get all users
-GET| /users/:id | Get user by its id
-PUT| /users/:id | Create a new user
-POST| /users/:id | Update an existing user
-DELETE| /users/:id | Delete an exisiting user
-GET| /accounts | Get all accounts
-GET| /account/{accountId}/balance | Get account balance by accountId
-PUT| /account/create | Create a new account
-DELETE| /account/{accountId} | Remove account by accountId
-PUT| /account/{accountId}/withdraw/{amount} | Withdraw money from account
-PUT| /account/{accountId}/deposit/{amount} | Deposit money from account
-POST| /transaction | Perform transaction between 2 user accounts
+GET| /user/all | Get all users
+GET| /user/:id | Get user by its id
+PUT| /user/:id | Create a new user
+POST| /user/:id | Update an existing user
+DELETE| /user/:id | Delete an exisiting user
+GET| /account/all | Get all accounts
+GET| /account/:id | Get account details by id
+GET| /account/:id/balance | Get account balance by accountId
+PUT| /account/:id | Create a new account
+DELETE| /account/:id | Remove account by accountId
+PUT| /account/:id/withdraw/:amount | Withdraw money from account
+PUT| /account/:id/deposit/:amount | Deposit money from account
+POST| /moneytransfer | Perform transaction between 2 user accounts
 
 #### Https Status
 * 200 OK: The request has succeeded

@@ -5,12 +5,14 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.Currency;
+import java.util.Optional;
+
 @NoArgsConstructor
 @AllArgsConstructor
 public class Account {
     private String accountID;
     private User user;
-    private volatile BigDecimal balance; //volatile to make sure it works correctly in multithreaded context
+    private volatile  BigDecimal balance; //volatile to make sure it works correctly in multithreaded context
     private Currency currency;
 
     public String getAccountID() {
