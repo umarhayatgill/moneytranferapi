@@ -2,33 +2,42 @@ package service;
 
 import dao.UserDao;
 import dao.UserDaoImpl;
+import exception.AlreadyExistException;
 import exception.NotFoundException;
 import model.User;
 
-import java.util.List;
-
-
+import java.util.Collection;
+import java.util.Map;
 
 public class UserServiceImpl implements UserService {
     private UserDao userDao = UserDaoImpl.getInstance();
 
     @Override
-    public List<User> getAllUsers() {
+    public Collection<User> getAllUsers() {
         return userDao.getAllUsers();
     }
 
     @Override
-    public User getUser(String emailId) throws Exception {
-        return userDao.getUser(emailId);
+    public User getUser(String id) throws NotFoundException {
+        return userDao.getUser(id);
     }
 
     @Override
-    public User createUser(String name, String emailId) throws Exception {
-        return userDao.createUser(name, emailId);
+    public void createUser(User user) throws AlreadyExistException {
+        userDao.createUser(user);
+    }
+    @Override
+    public User updateUser(User user) throws NotFoundException {
+        return userDao.updateUser(user);
     }
 
     @Override
-    public User updateUser(String name, String emailId) throws NotFoundException {
-        return userDao.updateUser(name, emailId);
+    public boolean userExist(final String id){
+        return userDao.userExist(id);
+    }
+
+    @Override
+    public void deleteUser(final String userId) throws NotFoundException {
+        userDao.deleteUser(userId);
     }
 }

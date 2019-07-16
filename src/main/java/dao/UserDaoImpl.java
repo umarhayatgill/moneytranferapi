@@ -4,27 +4,22 @@ import exception.AlreadyExistException;
 import exception.NotFoundException;
 import model.User;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserDaoImpl implements UserDao {
     private static UserDaoImpl userDaoImpl = null;
     User user;
-    List<User> list = new ArrayList<>();
+    Map<String, User> usersDatabase = new HashMap<>();
     public UserDaoImpl(){
-        //in memort database for the sake of simplicity of task
-        user = new User();
-        user.setEmail("firstuser@abc.com");
-        user.setName("firstuser");
-        list.add(user);
-        user = new User();
-        user.setEmail("seconduser@abc.com");
-        user.setName("seconduser");
-        list.add(user);
-        user = new User();
-        user.setEmail("john@foobar.com");
-        user.setName("john");
-        list.add(user);
+        //in memory database for the sake of simplicity of task
+        user = User.builder().withId("1").withFirstName("foo")
+                .withLastName("bar").withEmail("foo@bar.com").build();
+        usersDatabase.put(user.getId(), user);
+        user = User.builder().withId("2").withFirstName("anotherfoo")
+                .withLastName("anotherbar").withEmail("anotherfoo@anotherbar.com").build();
+        usersDatabase.put(user.getId(), user);
     }
 
     //we can place synchronized inside method as well with double lock checking
@@ -37,40 +32,50 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public List<User> getAllUsers() {
-        return list;
+    public Collection<User> getAllUsers() {
+        return usersDatabase.values();
     }
 
     @Override
-    public User getUser(String emailId) throws Exception {
-        return list.stream().filter(user -> user.getEmail().equals(emailId)).findFirst()
-                .orElseThrow(() -> new Exception("User not found"));
+    public User getUser(String id) throws NotFoundException {
+        return usersDatabase.values().stream().filter(user -> user.getId().equals(id)).findFirst()
+                .orElseThrow(() -> new NotFoundException("User not found"));
     }
 
     @Override
-    public User createUser(String name, String emailId) throws Exception {
-        if(list.stream().anyMatch(user -> user.getEmail().trim().equals(emailId))){
-            throw new AlreadyExistException("User already exists");
+    public void createUser(User user) throws AlreadyExistException {
+        if(this.userExist(user.getId())){
+            throw new AlreadyExistException("User already exists in database");
         }else {
-            user = new User();
-            user.setName(name);
-            user.setEmail(emailId);
-            list.add(user);
+            usersDatabase.put(user.getId(), user);
+        }
+    }
+
+    @Override
+    public User updateUser(User user) throws NotFoundException {
+        if(this.userExist(user.getId())){
+            usersDatabase.put(user.getId(), user);
+        }else {
+            throw new NotFoundException("User with this email id does not exists in database");
         }
         return user;
     }
 
     @Override
-    public User updateUser(String name, String emailId) throws NotFoundException {
-        if(list.stream().anyMatch(user -> user.getEmail().trim().equals(emailId))){
-            list.remove(user);
-            user = new User();
-            user.setName(name);
-            user.setEmail(emailId);
-            list.add(user);
-        }else {
-            throw new NotFoundException("User with this email id does not exists");
+    public boolean userExist(String id) {
+        boolean userExist = false;
+        if(usersDatabase.values().stream().anyMatch(user -> user.getId().equals(id))){
+            userExist=true;
         }
-        return user;
+        return userExist;
+    }
+
+    @Override
+    public void deleteUser(final String userId) throws NotFoundException {
+        if(usersDatabase.containsKey(userId)) {
+            usersDatabase.remove(userId);
+        }else{
+            throw new NotFoundException("User not found in database");
+        }
     }
 }

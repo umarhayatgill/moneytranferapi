@@ -1,23 +1,18 @@
-import controller.AccountController;
+import static java.lang.Thread.sleep;
+
+import static org.junit.Assert.assertEquals;
+
+import java.math.BigDecimal;
+import java.util.Map;
+
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import model.Account;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import service.AccountService;
+
 import spark.Spark;
-
-import java.math.BigDecimal;
-import java.util.Currency;
-
-import static java.lang.Thread.sleep;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
-
 
 public class TransferSteps {
 
@@ -27,15 +22,8 @@ public class TransferSteps {
     private BigDecimal balanceToTransfer;
     private String toUserAccountId;
 
-    @Mock
-    private AccountService accountService;
-
-    @InjectMocks
-    private AccountController accountController;
-
     @Before
     public void init() throws InterruptedException {
-        MockitoAnnotations.initMocks(this);
         MoneyTransferAPI.main(null);
         sleep(3000);
     }
@@ -50,20 +38,6 @@ public class TransferSteps {
         this.fromUserAccountId = fromUserAccountId;
         this.balanceToTransfer = balanceToTransfer;
         this.toUserAccountId = toUserAccountId;
-
-
-
-        Account accountStub = new Account();
-        accountStub.setAccountID(fromUserAccountId);
-        accountStub.setBalance(BigDecimal.valueOf(12));
-        accountStub.setCurrency(Currency.getInstance("EUR"));
-        when(accountService.getAccount(fromUserAccountId)).thenReturn(accountStub);
-        accountStub = new Account();
-        accountStub.setAccountID(toUserAccountId);
-        accountStub.setBalance(BigDecimal.valueOf(10));
-        accountStub.setCurrency(Currency.getInstance("EUR"));
-        when(accountService.getAccount(toUserAccountId)).thenReturn(accountStub);
-
     }
 
     @When("^the transfer is requested$")
@@ -72,8 +46,22 @@ public class TransferSteps {
                 "&toAccountId="+this.toUserAccountId+"&amountToTransfer="+this.balanceToTransfer);
     }
 
-    @Then("^(.*) receives (.*) Euro in his account$")
-    public void thenMoneyShouldBeTransferred(String toUserAccountId, BigDecimal balanceToTransfer) throws Throwable {
+    @Then("^amount is deducted and from sender's account$")
+    public void andAmountShouldBeDeductedFromSender() throws Throwable {
+        res = Helper.request("GET", "/accounts/"+this.fromUserAccountId);
+        Map<String, String> json = res.json();
+        assertEquals(200, res.status);
+        assertEquals(0.0,json.get("balance"));
+    }
+
+    @And("^receiver receives the amount$")
+    public void thenMoneyShouldBeTransferredToReceiver() throws Throwable {
+        res = Helper.request("GET", "/accounts/"+this.toUserAccountId);
+        Map<String, String> json = res.json();
+        assertEquals(220.0, json.get("balance"));
         assertEquals(200, res.status);
     }
+
+
+
 }

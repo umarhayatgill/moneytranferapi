@@ -7,8 +7,8 @@ public class ResponseSuccess {
         this.message = String.format(message, args);
     }
 
-    public ResponseSuccess(Exception e) {
-        this.message = e.getMessage();
+    public ResponseSuccess(String message) {
+        this.message = message;
     }
 
     public String getMessage() {

@@ -1,5 +1,6 @@
 Feature: Money Transfer
     Scenario: Successful money transfer
-        Given that the Aqib has to transfer 150 Euro to Umar
+        Given that the 123 has to transfer 200 Euro to 234
         When the transfer is requested
-        Then Umar receives 150 Euro in his account
+        Then amount is deducted and from sender's account
+        And receiver receives the amount

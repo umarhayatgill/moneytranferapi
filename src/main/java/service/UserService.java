@@ -1,20 +1,22 @@
 package service;
 
+import exception.AlreadyExistException;
 import exception.NotFoundException;
 import model.User;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Map;
 
 public interface UserService {
-    // returns a list of all users
-    public List<User> getAllUsers();
+    Collection<User> getAllUsers();
 
-    // returns a single user by id
-    public User getUser(String emailId) throws Exception;
+    User getUser(String email) throws NotFoundException;
 
-    // creates a new user
-    public User createUser(String name, String emailId) throws Exception;
+    void createUser(User user) throws AlreadyExistException;
 
-    // updates an existing user
-    public User updateUser(String name, String emailId) throws NotFoundException;
+    User updateUser(User user) throws NotFoundException;
+
+    boolean userExist(String userId);
+
+    void deleteUser(String userId) throws NotFoundException;
 }

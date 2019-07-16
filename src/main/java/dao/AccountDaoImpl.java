@@ -16,7 +16,7 @@ public class AccountDaoImpl implements AccountDao {
     public AccountDaoImpl(){
         account = new Account();
         account.setAccountID("123");
-        account.setBalance(BigDecimal.valueOf(100));
+        account.setBalance(BigDecimal.valueOf(200));
         account.setCurrency(Currency.getInstance("EUR"));
         list.add(account);
         account = new Account();
