@@ -1,7 +1,11 @@
+import binding.BasicModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import controller.AccountController;
 import controller.UserController;
 import helper.ResponseError;
 import service.AccountServiceImpl;
+import service.UserService;
 import service.UserServiceImpl;
 
 import static helper.JsonUtil.toJson;
@@ -16,7 +20,9 @@ public class MoneyTransferAPI {
             res.status(400);
             res.body(toJson(new ResponseError(e)));
         });
-        new UserController(new UserServiceImpl());
+        Injector injector = Guice.createInjector(new BasicModule());
+        UserService userService = injector.getInstance(UserService.class);
+        new UserController(userService);
         new AccountController(new AccountServiceImpl());
     }
 }

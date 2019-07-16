@@ -1,5 +1,5 @@
 Feature: Money Transfer
     Scenario: Successful money transfer
-        Given that the user Vinod has 150 Euro in his account
-        When user "Vinod" makes a 100 Euro transfer to user "Shinod"
-        Then 100 Euro is transferred successfully to user Shinod
+        Given that the Aqib has to transfer 150 Euro to Umar
+        When the transfer is requested
+        Then Umar receives 150 Euro in his account

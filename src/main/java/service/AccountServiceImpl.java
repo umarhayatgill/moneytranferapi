@@ -23,8 +23,8 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void makePayment(String transferFrom, String transferTo, String amountToTransfer) throws NotSufficientBalanceException, NotFoundException {
-        Account transferFromAccount = accountDao.getAccount(transferFrom);
-        Account transferToAccount = accountDao.getAccount(transferTo);
+        Account transferFromAccount = this.getAccount(transferFrom);
+        Account transferToAccount = this.getAccount(transferTo);
         BigDecimal amountToTransferInDecimal = BigDecimal.valueOf(Long.valueOf(amountToTransfer));
         accountDao.makePayment(transferFromAccount, transferToAccount, amountToTransferInDecimal);
     }
