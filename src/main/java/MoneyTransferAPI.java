@@ -1,15 +1,16 @@
-import binding.BasicModule;
+import static helper.JsonUtil.toJson;
+import static spark.Spark.after;
+import static spark.Spark.exception;
+
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+
+import binding.BasicModule;
 import controller.AccountController;
 import controller.UserController;
 import helper.ResponseError;
 import service.AccountServiceImpl;
 import service.UserService;
-import service.UserServiceImpl;
-
-import static helper.JsonUtil.toJson;
-import static spark.Spark.*;
 
 public class MoneyTransferAPI {
     public static void main(String[] args) {

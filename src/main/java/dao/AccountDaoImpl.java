@@ -1,5 +1,6 @@
 package dao;
 
+import exception.AlreadyExistException;
 import exception.NotFoundException;
 import exception.NotSufficientBalanceException;
 import model.Account;
@@ -13,19 +14,11 @@ public class AccountDaoImpl implements AccountDao {
     Map<String, Account> accountsDatabase = new HashMap<>();
     //in memory database
     public AccountDaoImpl(){
-        account = new Account();
-        account.setAccountID("1");
-        account.setUser(User.builder().withId("1").withFirstName("foo").withLastName("bar")
-        .withEmail("foo@bar.com").build());
-        account.setBalance(BigDecimal.valueOf(200));
-        account.setCurrency(Currency.getInstance("EUR"));
+        account = Account.builder().withAccountID("1").withUserId("1")
+                .withBalance(BigDecimal.valueOf(200)).withCurrency(Currency.getInstance("EUR")).build();
         accountsDatabase.put(account.getAccountID(), account);
-        account = new Account();
-        account.setAccountID("2");
-        account.setUser(User.builder().withId("2").withFirstName("anotherfoo").withLastName("anotherbar")
-                .withEmail("anotherfoo@anotherbar.com").build());
-        account.setBalance(BigDecimal.valueOf(20));
-        account.setCurrency(Currency.getInstance("EUR"));
+        account = Account.builder().withAccountID("2").withUserId("2")
+                .withBalance(BigDecimal.valueOf(20)).withCurrency(Currency.getInstance("EUR")).build();
         accountsDatabase.put(account.getAccountID(), account);
     }
 
@@ -42,7 +35,7 @@ public class AccountDaoImpl implements AccountDao {
     @Override
     public Account getAccount(String accountId) throws NotFoundException {
         return accountsDatabase.values().stream().filter(account -> account.getAccountID().equals(accountId)).findFirst()
-                .orElseThrow(() -> new NotFoundException("Account number %s not found"));
+                .orElseThrow(() -> new NotFoundException("Account number not found"));
     }
 
     @Override
@@ -52,7 +45,17 @@ public class AccountDaoImpl implements AccountDao {
             return account.get().getBalance();
         }
         else {
-           throw new NotFoundException("Account number %s not found");
+           throw new NotFoundException("Account number not found");
+        }
+    }
+
+    @Override
+    public void createAccount(final Account account) throws AlreadyExistException {
+        if(accountsDatabase.containsKey(account.getAccountID())){
+            throw new AlreadyExistException("Account number already exist");
+        }
+        else{
+            accountsDatabase.put(account.getAccountID(),account);
         }
     }
 
@@ -72,8 +75,10 @@ public class AccountDaoImpl implements AccountDao {
             throw new NotSufficientBalanceException("Balance is not sufficient to make transaction");
         }
         else{
-            transferFrom.setBalance(transferFrom.getBalance().subtract(amountToTransfer));
-            transferTo.setBalance(transferTo.getBalance().add(amountToTransfer));
+            synchronized (transferFrom) {
+                transferFrom.setBalance(transferFrom.getBalance().subtract(amountToTransfer));
+                transferTo.setBalance(transferTo.getBalance().add(amountToTransfer));
+            }
         }
     }
 }

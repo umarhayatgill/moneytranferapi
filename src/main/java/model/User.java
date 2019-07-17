@@ -23,22 +23,6 @@ public final class User {
         return new Builder();
     }
 
-    public void setId(final String id) {
-        this.id = id;
-    }
-
-    public void setFirstName(final String firstName) {
-        this.firstName = firstName;
-    }
-
-    public void setLastName(final String lastName) {
-        this.lastName = lastName;
-    }
-
-    public void setEmail(final String email) {
-        this.email = email;
-    }
-
     public String getId() {
         return id;
     }
