@@ -47,7 +47,7 @@ public class AccountController {
             }
         });
 
-        //add a new account
+        //create a new account
         put("/account/:id", (req, res) -> {
             String accountId = req.params(":id");
             try {
@@ -56,25 +56,8 @@ public class AccountController {
                                 withCurrency(Currency.getInstance(req.queryParams("currencyCode"))).build();
                 accountService.createAccount(account);
                 return new Gson().toJson(
-                        new StandardResponse(StatusResponse.SUCCESS,new Gson()
-                                .toJsonTree(accountService.updateAccount(account))));
-            }catch (NotFoundException ex) {
-                return new Gson().toJson(
-                        new StandardResponse(StatusResponse.ERROR,"Account with %s id does not exist", accountId));
-            }
-        });
-
-        //update an existing account
-        put("/account/:id", (req, res) -> {
-            String accountId = req.params(":id");
-            try {
-                Account account = Account.builder().withAccountID(accountId).withUserId(req.queryParams("userId"))
-                        .withBalance(BigDecimal.valueOf(Long.valueOf(req.queryParams("balance")))).
-                                withCurrency(Currency.getInstance(req.queryParams("currencyCode"))).build();
-                accountService.updateAccount(account);
-                return new Gson().toJson(
-                        new StandardResponse(StatusResponse.SUCCESS,"Account with %s id has been created", accountId));
-            }catch (NotFoundException ex) {
+                        new StandardResponse(StatusResponse.SUCCESS,"New account has been created"));
+            }catch (AlreadyExistException ex) {
                 return new Gson().toJson(
                         new StandardResponse(StatusResponse.ERROR,"Account with %s id already exist", accountId));
             }
@@ -94,6 +77,39 @@ public class AccountController {
                                 "Account with %s id does not exist", accountId));
             }
         });
+
+        //withdraw money from account
+        put("/account/:id/withdraw/:amount", (req, res) -> {
+            String accountId = req.params(":id");
+            BigDecimal amountToWithdraw = BigDecimal.valueOf(Long.valueOf(req.params(":amount")));
+            try {
+                accountService.withdrawMoney(accountId, amountToWithdraw);
+                return new Gson().toJson(
+                        new StandardResponse(StatusResponse.SUCCESS,
+                                "Amount has been withdrawn from account with id %s", accountId));
+            }catch (NotFoundException ex) {
+                return new Gson().toJson(
+                        new StandardResponse(StatusResponse.ERROR,
+                                "Account with %s id does not exist", accountId));
+            }
+        });
+
+        //deposit money to account
+        put("/account/:id/deposit/:amount", (req, res) -> {
+            String accountId = req.params(":id");
+            BigDecimal amountToDeposit = BigDecimal.valueOf(Long.valueOf(req.params(":amount")));
+            try {
+                accountService.depositMoney(accountId, amountToDeposit);
+                return new Gson().toJson(
+                        new StandardResponse(StatusResponse.SUCCESS,
+                                "Amount has been deposited to account with id %s", accountId));
+            }catch (NotFoundException ex) {
+                return new Gson().toJson(
+                        new StandardResponse(StatusResponse.ERROR,
+                                "Account with %s id does not exist", accountId));
+            }
+        });
+
 
         post("/moneytransfer", (req, res) ->
         {

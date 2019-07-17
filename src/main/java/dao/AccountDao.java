@@ -14,5 +14,7 @@ public interface AccountDao {
     BigDecimal getAccountBalance(String accountId) throws NotFoundException;
     void createAccount(Account accountId) throws AlreadyExistException;
     void deleteAccount(String accountId) throws NotFoundException;
+    void withdrawMoney(String accountId, BigDecimal amountToWithdraw) throws NotFoundException, NotSufficientBalanceException;
+    void depositMoney(String accountId, BigDecimal amountToDeposit) throws NotFoundException;
     void makePayment(Account transferFrom, Account transferTo, BigDecimal amountToTransfer) throws NotSufficientBalanceException;
 }

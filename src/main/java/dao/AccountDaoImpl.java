@@ -70,6 +70,33 @@ public class AccountDaoImpl implements AccountDao {
     }
 
     @Override
+    public void withdrawMoney(final String accountId, final BigDecimal amountToWithdraw) throws NotFoundException, NotSufficientBalanceException {
+        Optional<Account> account = accountsDatabase.values().stream().filter(acc -> acc.getAccountID().equals(accountId)).findFirst();
+        if(account.isPresent()){
+            if(account.get().getBalance().compareTo(amountToWithdraw) < 0){
+                throw new NotSufficientBalanceException("Balance is not sufficient for withdrawl");
+            }
+            account.get().setBalance(account.get().getBalance().subtract(amountToWithdraw));
+            accountsDatabase.put(accountId, account.get());
+        }
+        else {
+            throw new NotFoundException("Account number not found");
+        }
+    }
+
+    @Override
+    public void depositMoney(final String accountId, final BigDecimal amountToDeposit) throws NotFoundException {
+        Optional<Account> account = accountsDatabase.values().stream().filter(acc -> acc.getAccountID().equals(accountId)).findFirst();
+        if(account.isPresent()){
+            account.get().setBalance(account.get().getBalance().add(amountToDeposit));
+            accountsDatabase.put(accountId, account.get());
+        }
+        else {
+            throw new NotFoundException("Account number not found");
+        }
+    }
+
+    @Override
     public void makePayment(Account transferFrom, Account transferTo, BigDecimal amountToTransfer) throws NotSufficientBalanceException {
         if(transferFrom.getBalance().compareTo(amountToTransfer) < 0){
             throw new NotSufficientBalanceException("Balance is not sufficient to make transaction");
@@ -81,4 +108,5 @@ public class AccountDaoImpl implements AccountDao {
             }
         }
     }
+
 }
