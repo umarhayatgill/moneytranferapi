@@ -1,7 +1,5 @@
-import com.google.gson.Gson;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 
 public class TestResponse {
 
@@ -13,7 +11,7 @@ public class TestResponse {
         this.body = body;
     }
 
-    public Map<String,String> json() {
-        return new Gson().fromJson(body, HashMap.class);
+    public JsonElement jsonElement() {
+        return new JsonParser().parse(body);
     }
 }

@@ -12,10 +12,12 @@ public class StandardResponse {
         this.status = status;
     }
     public StandardResponse(StatusResponse status, String message) {
+        this.status = status;
         this.message = message;
     }
 
     public StandardResponse(StatusResponse status, String message, String... args) {
+        this.status = status;
         this.message = String.format(message, args);
     }
 

@@ -3,7 +3,8 @@ import static java.lang.Thread.sleep;
 import static org.junit.Assert.assertEquals;
 
 import java.math.BigDecimal;
-import java.util.Map;
+
+import com.google.gson.JsonElement;
 
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
@@ -16,7 +17,7 @@ import spark.Spark;
 
 public class TransferSteps {
 
-    private TestResponse res;
+    private TestResponse testResponse;
 
     private String fromUserAccountId;
     private BigDecimal balanceToTransfer;
@@ -42,24 +43,24 @@ public class TransferSteps {
 
     @When("^the transfer is requested$")
     public void whenUserMakesATransfer() throws Throwable {
-        res = Helper.request("POST", "/moneytransfer?fromAccountId="+this.fromUserAccountId+
+        testResponse = Helper.request("POST", "/moneytransfer?fromAccountId="+this.fromUserAccountId+
                 "&toAccountId="+this.toUserAccountId+"&amountToTransfer="+this.balanceToTransfer);
     }
 
     @Then("^amount is deducted and from sender's account$")
     public void andAmountShouldBeDeductedFromSender() throws Throwable {
-        res = Helper.request("GET", "/accounts/"+this.fromUserAccountId);
-        Map<String, String> json = res.json();
-        assertEquals(200, res.status);
-        assertEquals(0.0,json.get("balance"));
+        testResponse = Helper.request("GET", "/account/"+this.fromUserAccountId);
+        assertEquals(200, testResponse.status);
+        JsonElement jsonElement = testResponse.jsonElement();
+        assertEquals(BigDecimal.ZERO,jsonElement.getAsJsonObject().get("data").getAsJsonObject().get("balance").getAsBigDecimal());
     }
 
     @And("^receiver receives the amount$")
     public void thenMoneyShouldBeTransferredToReceiver() throws Throwable {
-        res = Helper.request("GET", "/accounts/"+this.toUserAccountId);
-        Map<String, String> json = res.json();
-        assertEquals(220.0, json.get("balance"));
-        assertEquals(200, res.status);
+        testResponse = Helper.request("GET", "/account/"+this.toUserAccountId);
+        assertEquals(200, testResponse.status);
+        JsonElement jsonElement = testResponse.jsonElement();
+        assertEquals(BigDecimal.valueOf(220), jsonElement.getAsJsonObject().get("data").getAsJsonObject().get("balance").getAsBigDecimal());
     }
 
 

@@ -8,10 +8,11 @@ import model.User;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class AccountDaoImpl implements AccountDao {
     Account account;
-    Map<String, Account> accountsDatabase = new HashMap<>();
+    Map<String, Account> accountsDatabase = new ConcurrentHashMap<>();
     //in memory database
     public AccountDaoImpl(){
         account = Account.builder().withAccountID("1").withUserId("1")
@@ -97,14 +98,17 @@ public class AccountDaoImpl implements AccountDao {
     }
 
     @Override
-    public void makePayment(Account transferFrom, Account transferTo, BigDecimal amountToTransfer) throws NotSufficientBalanceException {
-        if(transferFrom.getBalance().compareTo(amountToTransfer) < 0){
-            throw new NotSufficientBalanceException("Balance is not sufficient to make transaction");
-        }
-        else{
-            synchronized (transferFrom) {
-                transferFrom.setBalance(transferFrom.getBalance().subtract(amountToTransfer));
-                transferTo.setBalance(transferTo.getBalance().add(amountToTransfer));
+    public void makePayment(String transferFrom, String transferTo, BigDecimal amountToTransfer) throws NotSufficientBalanceException, NotFoundException {
+        synchronized (accountsDatabase.get(transferFrom)) { //lock the account rows you are going to make transactions on to avoid concurrency problems.
+            synchronized (accountsDatabase.get(transferTo)) {
+                Account transferFromAccount = this.getAccount(transferFrom);
+                Account transferToAccount = this.getAccount(transferTo);
+                if (transferFromAccount.getBalance().compareTo(amountToTransfer) < 0) {
+                    throw new NotSufficientBalanceException("Balance is not sufficient to make transaction");
+                } else {
+                    transferFromAccount.setBalance(transferFromAccount.getBalance().subtract(amountToTransfer));
+                    transferToAccount.setBalance(transferToAccount.getBalance().add(amountToTransfer));
+                }
             }
         }
     }

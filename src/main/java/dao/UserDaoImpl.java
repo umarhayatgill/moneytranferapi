@@ -7,11 +7,12 @@ import model.User;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class UserDaoImpl implements UserDao {
     private static UserDaoImpl userDaoImpl = null;
     User user;
-    Map<String, User> usersDatabase = new HashMap<String, User>();
+    Map<String, User> usersDatabase = new ConcurrentHashMap<>();
     public UserDaoImpl(){
         //in memory database for the sake of simplicity of task
         user = User.builder().withId("1").withFirstName("foo")
@@ -56,7 +57,7 @@ public class UserDaoImpl implements UserDao {
         if(this.userExist(user.getId())){
             usersDatabase.put(user.getId(), user);
         }else {
-            throw new NotFoundException("User with this email id does not exists in database");
+            throw new NotFoundException("User with this id does not exists in database");
         }
         return user;
     }

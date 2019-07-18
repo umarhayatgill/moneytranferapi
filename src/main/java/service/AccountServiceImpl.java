@@ -33,14 +33,6 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void makePayment(final String transferFrom, final String transferTo, final String amountToTransfer) throws NotSufficientBalanceException, NotFoundException {
-        Account transferFromAccount = this.getAccount(transferFrom);
-        Account transferToAccount = this.getAccount(transferTo);
-        BigDecimal amountToTransferInDecimal = BigDecimal.valueOf(Long.valueOf(amountToTransfer));
-        accountDao.makePayment(transferFromAccount, transferToAccount, amountToTransferInDecimal);
-    }
-
-    @Override
     public void createAccount(final Account account) throws AlreadyExistException {
         accountDao.createAccount(account);
     }
@@ -53,5 +45,11 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void depositMoney(final String accountId, final BigDecimal amountToWithdraw) throws NotFoundException, NotSufficientBalanceException {
         accountDao.depositMoney(accountId, amountToWithdraw);
+    }
+
+    @Override
+    public void makePayment(final String transferFrom, final String transferTo, final String amountToTransfer) throws NotSufficientBalanceException, NotFoundException {
+        BigDecimal amountToTransferInDecimal = BigDecimal.valueOf(Long.valueOf(amountToTransfer));
+        accountDao.makePayment(transferFrom, transferTo, amountToTransferInDecimal);
     }
 }

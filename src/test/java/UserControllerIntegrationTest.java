@@ -1,12 +1,14 @@
+import static java.lang.Thread.sleep;
+
+import static org.junit.Assert.assertEquals;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import com.google.gson.JsonElement;
+
 import spark.Spark;
-
-import java.util.Map;
-
-import static java.lang.Thread.sleep;
-import static org.junit.Assert.assertEquals;
 
 public class UserControllerIntegrationTest {
     @BeforeClass
@@ -21,22 +23,33 @@ public class UserControllerIntegrationTest {
     }
 
     @Test
-    public void aNewUserShouldBeCreated() {
-        TestResponse res = Helper.request("POST", "/users?name=umar&email=umarhayat@foobar.com");
-        Map<String, String> json = res.json();
+    public void getListOfAllUsers() {
+        TestResponse res = Helper.request("GET", "/users");
+        JsonElement json = res.jsonElement();
         assertEquals(200, res.status);
-        assertEquals("umar", json.get("name"));
-        assertEquals("umarhayat@foobar.com", json.get("email"));
+        assertEquals(2, json.getAsJsonObject().size());
+    }
+
+    @Test
+    public void aNewUserShouldBeCreated() {
+        TestResponse res = Helper.request("POST", "/user/3?firstName=umar&lastName=hayat&email=umarhayat@foobar.com");
+        JsonElement json = res.jsonElement();
+        assertEquals(200, res.status);
     }
 
     @Test
     public void anExistingUserShouldBeUpdated() {
-        TestResponse res = Helper.request("PUT", "/users?name=john&email=umarhayat@foobar.com");
-        Map<String, String> json = res.json();
+        TestResponse res = Helper.request("PUT", "/user/3?firstName=umar&lastName=hayatgill&email=umarhayatgill@foobar.com");
+        JsonElement json = res.jsonElement();
         assertEquals(200, res.status);
-        assertEquals("john", json.get("name"));
-        assertEquals("umarhayat@foobar.com", json.get("email"));
+        assertEquals("hayatgill", json.getAsJsonObject().get("data").getAsJsonObject().get("lastName").getAsString());
+        assertEquals("umarhayatgill@foobar.com", json.getAsJsonObject().get("data").getAsJsonObject().get("email").getAsString());
     }
 
-
+    @Test
+    public void anExistingUserShouldBeDeleted() {
+        TestResponse res = Helper.request("DELETE", "/user/3");
+        JsonElement json = res.jsonElement();
+        assertEquals(200, res.status);
+    }
 }
