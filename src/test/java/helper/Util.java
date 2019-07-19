@@ -1,3 +1,6 @@
+package helper;
+
+import helper.TestResponse;
 import spark.utils.IOUtils;
 
 import java.io.IOException;
@@ -6,7 +9,7 @@ import java.net.URL;
 
 import static org.junit.Assert.fail;
 
-public class Helper {
+public class Util {
     public static TestResponse request(String method, String path) {
         HttpURLConnection connection = null;
         try {

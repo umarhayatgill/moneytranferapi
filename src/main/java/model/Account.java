@@ -5,17 +5,14 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.Currency;
-import java.util.Optional;
 
-@NoArgsConstructor
-@AllArgsConstructor
 public class Account {
     private String accountID;
     private String userId;
     private volatile  BigDecimal balance; //volatile to make sure it works correctly in multithreaded context
     private Currency currency;
 
-    private Account(final Account.Builder builder) {
+    private Account(final Builder builder) {
         this.accountID = builder.accountID;
         this.userId = builder.userId;
         this.balance = builder.balance;
@@ -38,7 +35,7 @@ public class Account {
         return balance;
     }
 
-    public synchronized void setBalance(BigDecimal balance) {
+    public void setBalance(BigDecimal balance) {
        this.balance = balance;
     }
 

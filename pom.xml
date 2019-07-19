@@ -110,13 +110,5 @@
             <artifactId>javax.inject</artifactId>
             <version>1</version>
         </dependency>
-
-
-        <!-- https://mvnrepository.com/artifact/com.netflix.governator/governator -->
-
-
-
     </dependencies>
-
-    
 </project>
