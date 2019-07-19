@@ -7,6 +7,7 @@ import model.User;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class UserDaoImpl implements UserDao {
@@ -48,6 +49,12 @@ public class UserDaoImpl implements UserDao {
         if(this.userExist(user.getId())){
             throw new AlreadyExistException("User already exists in database");
         }else {
+            Objects.requireNonNull(
+                    user.getFirstName(), "First Name cannot be null");
+            Objects.requireNonNull(
+                    user.getLastName(), "Last Name cannot be null");
+            Objects.requireNonNull(
+                    user.getEmail(), "Email cannot be null");
             usersDatabase.put(user.getId(), user);
         }
     }
@@ -55,6 +62,12 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User updateUser(User user) throws NotFoundException {
         if(this.userExist(user.getId())){
+            Objects.requireNonNull(
+                    user.getFirstName(), "First Name cannot be null");
+            Objects.requireNonNull(
+                    user.getLastName(), "Last Name cannot be null");
+            Objects.requireNonNull(
+                    user.getEmail(), "Email cannot be null");
             usersDatabase.put(user.getId(), user);
         }else {
             throw new NotFoundException("User with this id does not exists in database");
