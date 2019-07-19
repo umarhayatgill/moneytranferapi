@@ -1,12 +1,14 @@
 import com.google.gson.JsonElement;
 import helper.TestResponse;
 import helper.Util;
+import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.BeforeClass;
+import spark.Spark;
 
 import java.math.BigDecimal;
 
@@ -26,8 +28,6 @@ public class TransferSteps {
         MoneyTransferAPI.main(null);
         sleep(3000);
     }
-
-
 
     @Given("^that the (.*) has to transfer (.*) Euro to (.*)")
     public void givenUserHasBalanceInAccount(String fromUserAccountId, BigDecimal balanceToTransfer, String toUserAccountId) throws Throwable {
