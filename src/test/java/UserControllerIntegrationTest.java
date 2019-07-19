@@ -1,12 +1,20 @@
+import static java.lang.Thread.sleep;
+
 import com.google.gson.JsonElement;
 import helper.TestResponse;
 import helper.Util;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 public class UserControllerIntegrationTest {
+    @Before
+    public  void beforeClass() throws InterruptedException {
+        MoneyTransferAPI.main(null);
+        sleep(3000);
+    }
     @Test
     public void getListOfAllUsers() {
         TestResponse res = Util.request("GET", "/users");

@@ -3,6 +3,7 @@ import helper.Util;
 import helper.TestResponse;
 import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import spark.Spark;
@@ -12,7 +13,15 @@ import java.math.BigDecimal;
 import static java.lang.Thread.sleep;
 import static org.junit.Assert.assertEquals;
 
+
+
 public class AccountControllerIntegrationTest {
+
+    @Before
+    public void beforeClass() throws InterruptedException {
+        MoneyTransferAPI.main(null);
+        sleep(3000);
+    }
 
     @Test
     public void getListOfAllAccounts() {
