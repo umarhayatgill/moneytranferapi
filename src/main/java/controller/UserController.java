@@ -14,7 +14,10 @@ import response.StatusResponse;
 import service.UserService;
 
 public class UserController {
-   public UserController(final UserService userService) {
+    UserServiceComponent userServiceComponent = DaggerUserServiceComponent.create();
+    UserService userService = userServiceComponent.buildUserService();
+
+    public UserController() {
         //get list of all users
        get("/users", (req, res) -> {
            String id = req.params(":id");

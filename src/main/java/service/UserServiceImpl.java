@@ -1,16 +1,20 @@
 package service;
 
+import java.util.Collection;
+
+import javax.inject.Inject;
+
 import dao.UserDao;
-import dao.UserDaoImpl;
 import exception.AlreadyExistException;
 import exception.NotFoundException;
 import model.User;
 
-import java.util.Collection;
-import java.util.Map;
-
 public class UserServiceImpl implements UserService {
-    private UserDao userDao = UserDaoImpl.getInstance();
+    private UserDao userDao;
+    @Inject
+    public UserServiceImpl(final UserDao userDao) {
+        this.userDao = userDao;
+    }
 
     @Override
     public Collection<User> getAllUsers() {

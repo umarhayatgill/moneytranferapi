@@ -12,8 +12,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class UserDaoImpl implements UserDao {
     private static UserDaoImpl userDaoImpl = null;
     User user;
-    Map<String, User> usersDatabase = new ConcurrentHashMap<>();
-    public UserDaoImpl(){
+    static Map<String, User> usersDatabase = new ConcurrentHashMap<>();
+    private UserDaoImpl(){
         //in memory database for the sake of simplicity of task
         user = User.builder().withId("1").withFirstName("foo")
                 .withLastName("bar").withEmail("foo@bar.com").build();

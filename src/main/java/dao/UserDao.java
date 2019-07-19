@@ -10,7 +10,7 @@ import java.util.Map;
 public interface UserDao {
     Collection<User> getAllUsers();
 
-    User getUser(String emailId) throws NotFoundException;
+    User getUser(String id) throws NotFoundException;
 
     void createUser(User user) throws AlreadyExistException;
 

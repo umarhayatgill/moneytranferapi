@@ -7,12 +7,13 @@ C:\Users\Umar_Hayat\IdeaProjects\moneytranferapi\src\main\java\dao\UserDaoImpl.j
 C:\Users\Umar_Hayat\IdeaProjects\moneytranferapi\src\main\java\dao\AccountDaoImpl.java
 C:\Users\Umar_Hayat\IdeaProjects\moneytranferapi\src\main\java\exception\NotFoundException.java
 C:\Users\Umar_Hayat\IdeaProjects\moneytranferapi\src\main\java\service\AccountService.java
-C:\Users\Umar_Hayat\IdeaProjects\moneytranferapi\src\main\java\binding\BasicModule.java
 C:\Users\Umar_Hayat\IdeaProjects\moneytranferapi\src\main\java\response\StatusResponse.java
 C:\Users\Umar_Hayat\IdeaProjects\moneytranferapi\src\main\java\model\User.java
 C:\Users\Umar_Hayat\IdeaProjects\moneytranferapi\src\main\java\dao\AccountDao.java
 C:\Users\Umar_Hayat\IdeaProjects\moneytranferapi\src\main\java\service\UserService.java
+C:\Users\Umar_Hayat\IdeaProjects\moneytranferapi\src\main\java\controller\UserServiceModule.java
 C:\Users\Umar_Hayat\IdeaProjects\moneytranferapi\src\main\java\service\UserServiceImpl.java
+C:\Users\Umar_Hayat\IdeaProjects\moneytranferapi\src\main\java\controller\UserServiceComponent.java
 C:\Users\Umar_Hayat\IdeaProjects\moneytranferapi\src\main\java\MoneyTransferAPI.java
 C:\Users\Umar_Hayat\IdeaProjects\moneytranferapi\src\main\java\dao\UserDao.java
 C:\Users\Umar_Hayat\IdeaProjects\moneytranferapi\src\main\java\controller\UserController.java
