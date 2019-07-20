@@ -1,35 +1,31 @@
 import com.google.gson.JsonElement;
 import helper.TestResponse;
 import helper.Util;
-import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.junit.BeforeClass;
-import spark.Spark;
 
 import java.math.BigDecimal;
 
 import static java.lang.Thread.sleep;
 import static org.junit.Assert.assertEquals;
 
-public class TransferSteps {
+public class MoneyTransferSteps {
 
     private TestResponse testResponse;
-
     private String fromUserAccountId;
     private BigDecimal balanceToTransfer;
     private String toUserAccountId;
 
     @Before
     public static void beforeClass() throws InterruptedException {
-        MoneyTransferAPI.main(null);
+        MoneyTransferAPI.main(null); //to spark the spark server
         sleep(3000);
     }
 
-    @Given("^that the (.*) has to transfer (.*) Euro to (.*)")
+    @Given("^that the user with account id (.*) has to transfer (.*) Euro to another user having account id (.*)")
     public void givenUserHasBalanceInAccount(String fromUserAccountId, BigDecimal balanceToTransfer, String toUserAccountId) throws Throwable {
         this.fromUserAccountId = fromUserAccountId;
         this.balanceToTransfer = balanceToTransfer;
@@ -57,7 +53,4 @@ public class TransferSteps {
         JsonElement jsonElement = testResponse.jsonElement();
         assertEquals(BigDecimal.valueOf(220), jsonElement.getAsJsonObject().get("data").getAsJsonObject().get("balance").getAsBigDecimal());
     }
-
-
-
 }

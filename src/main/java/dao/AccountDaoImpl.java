@@ -62,7 +62,13 @@ public class AccountDaoImpl implements AccountDao {
 
     @Override
     public void deleteAccount(String accountId) throws NotFoundException {
-        accountsDatabase.remove(accountId);
+        if(accountsDatabase.containsKey(accountId)){
+            accountsDatabase.remove(accountId);
+        }
+        else{
+            throw new NotFoundException("Account id not found");
+        }
+
     }
 
     @Override

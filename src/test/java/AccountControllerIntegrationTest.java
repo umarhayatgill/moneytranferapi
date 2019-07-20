@@ -15,14 +15,13 @@ public class AccountControllerIntegrationTest {
 
     @Before
     public void beforeClass() throws InterruptedException {
-        MoneyTransferAPI.main(null);
+        MoneyTransferAPI.main(null); //to spark the spark server
         sleep(3000);
     }
 
-
     @Test
     public void getListOfAllAccounts() {
-        TestResponse res = Util.request("GET", "/accounts");
+        TestResponse res = Util.request("GET", "/account/all");
         JsonElement json = res.jsonElement();
         Assert.assertEquals(200, res.status);
         assertEquals(2, json.getAsJsonObject().size());

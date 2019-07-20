@@ -14,12 +14,12 @@ import static org.junit.Assert.assertEquals;
 public class UserControllerIntegrationTest {
     @Before
     public  void beforeClass() throws InterruptedException {
-        MoneyTransferAPI.main(null);
+        MoneyTransferAPI.main(null); //to spark the spark server
         sleep(3000);
     }
     @Test
     public void getListOfAllUsers() {
-        TestResponse res = Util.request("GET", "/users");
+        TestResponse res = Util.request("GET", "/user/all");
         JsonElement json = res.jsonElement();
         Assert.assertEquals(200, res.status);
         assertEquals(2, json.getAsJsonObject().size());

@@ -10,16 +10,22 @@ import java.util.Currency;
 
 import com.google.gson.Gson;
 
+import dependencyinjection.daggercomponents.AccountServiceComponent;
+import dependencyinjection.daggercomponents.DaggerAccountServiceComponent;
+import dependencyinjection.daggercomponents.UserServiceComponent;
 import model.Account;
 import response.StandardResponse;
 import response.StatusResponse;
 import service.AccountService;
+import service.UserService;
 
 public class AccountController {
-    public AccountController(final AccountService accountService) {
+    AccountServiceComponent accountServiceComponent = DaggerAccountServiceComponent.create();
+    AccountService accountService = accountServiceComponent.buildUserService();
+    public void registerAccountApiRoutes() {
 
         //get all accounts
-        get("/accounts", (req, res) -> {
+        get("/account/all", (req, res) -> {
             return new Gson().toJson(
                     new StandardResponse(StatusResponse.SUCCESS,new Gson()
                             .toJsonTree(accountService.getAllAccounts())));

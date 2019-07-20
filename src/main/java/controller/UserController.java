@@ -8,6 +8,8 @@ import static spark.Spark.put;
 
 import com.google.gson.Gson;
 
+import dependencyinjection.daggercomponents.DaggerUserServiceComponent;
+import dependencyinjection.daggercomponents.UserServiceComponent;
 import model.User;
 import response.StandardResponse;
 import response.StatusResponse;
@@ -16,10 +18,9 @@ import service.UserService;
 public class UserController {
     UserServiceComponent userServiceComponent = DaggerUserServiceComponent.create();
     UserService userService = userServiceComponent.buildUserService();
-
-    public UserController() {
+    public void registerUserApiRoutes() {
         //get list of all users
-       get("/users", (req, res) -> {
+       get("/user/all", (req, res) -> {
            String id = req.params(":id");
            return new Gson().toJson(
                    new StandardResponse(StatusResponse.SUCCESS,new Gson()
@@ -37,7 +38,7 @@ public class UserController {
         //create a new user
         post("/user/:id", (req, res) -> {
             String userId = req.params(":id");
-            User user = new User.Builder().withId(userId).withFirstName(req.queryParams("firstName"))
+            User user = User.builder().withId(userId).withFirstName(req.queryParams("firstName"))
                     .withLastName(req.queryParams("lastName")).withEmail(req.queryParams("email")).build();
             userService.createUser(user);
             return new Gson().toJson(
@@ -47,7 +48,7 @@ public class UserController {
         //edit a particular user
         put("/user/:id", (req, res) -> {
             String userId = req.params(":id");
-            User user = new User.Builder().withId(userId).withFirstName(req.queryParams("firstName"))
+            User user = User.builder().withId(userId).withFirstName(req.queryParams("firstName"))
                     .withLastName(req.queryParams("lastName")).withEmail(req.queryParams("email")).build();
             return new Gson().toJson(
                     new StandardResponse(StatusResponse.SUCCESS,new Gson()

@@ -1,12 +1,9 @@
-package controller;
-
-import javax.inject.Singleton;
+package dependencyinjection.daggermodules;
 
 import dagger.Module;
 import dagger.Provides;
 import dao.UserDao;
 import dao.UserDaoImpl;
-import service.UserService;
 import service.UserServiceImpl;
 
 @Module

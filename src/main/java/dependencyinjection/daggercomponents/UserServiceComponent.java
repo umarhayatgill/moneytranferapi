@@ -1,11 +1,11 @@
-package controller;
+package dependencyinjection.daggercomponents;
 
 import javax.inject.Singleton;
 
 import dagger.Component;
+import dependencyinjection.daggermodules.UserServiceModule;
 import service.UserServiceImpl;
 
-@Singleton
 @Component(modules = UserServiceModule.class)
 public interface UserServiceComponent {
     UserServiceImpl buildUserService();
