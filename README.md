@@ -7,7 +7,7 @@ mvn exec:java
 
 ### Technologies
 
-* Spark Java (Light weight framewrok for r with embedded Jetty container)
+* Spark Java (Light weight microservices backend framework with embedded Jetty container)
 * Cucumber (for acceptance testing of features)
 * Mockito (for mocking database calls in unit testing)
 * Dagger 2 for dependency injection (It is very light dependency 
