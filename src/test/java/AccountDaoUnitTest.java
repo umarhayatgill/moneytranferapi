@@ -46,7 +46,7 @@ public class AccountDaoUnitTest {
 
     @Test(expected = NotFoundException.class)
     public void deleteExistingAccountThrowsExceptionIfInvalid() throws NotFoundException {
-        accountDao.deleteAccount("4");
+        accountDao.deleteAccount("5");
     }
 
     @Test

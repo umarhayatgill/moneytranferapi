@@ -38,7 +38,7 @@ public class MoneyTransferSteps {
                 "&toAccountId="+this.toUserAccountId+"&amountToTransfer="+this.balanceToTransfer);
     }
 
-    @Then("^amount is deducted and from sender's account$")
+    @Then("^amount is deducted from sender's account$")
     public void andAmountShouldBeDeductedFromSender() throws Throwable {
         testResponse = Util.request("GET", "/account/"+this.fromUserAccountId);
         assertEquals(200, testResponse.status);

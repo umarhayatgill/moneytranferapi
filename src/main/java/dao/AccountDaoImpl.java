@@ -4,15 +4,20 @@ import exception.AlreadyExistException;
 import exception.NotFoundException;
 import exception.NotSufficientBalanceException;
 import model.Account;
-import model.User;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Collection;
+import java.util.Currency;
+import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class AccountDaoImpl implements AccountDao {
     Account account;
     Map<String, Account> accountsDatabase = new ConcurrentHashMap<>();
+    private  ReadWriteLock accountDatabseLock = new ReentrantReadWriteLock();
     //in memory database
     public AccountDaoImpl(){
         account = Account.builder().withAccountID("1").withUserId("1")
@@ -41,12 +46,17 @@ public class AccountDaoImpl implements AccountDao {
 
     @Override
     public BigDecimal getAccountBalance(String accountId) throws NotFoundException {
+        accountDatabseLock.readLock().lock();
+        try {
         Optional<Account> account = accountsDatabase.values().stream().filter(acc -> acc.getAccountID().equals(accountId)).findFirst();
         if(account.isPresent()){
             return account.get().getBalance();
         }
         else {
            throw new NotFoundException("Account number not found");
+        }
+        }finally {
+            accountDatabseLock.readLock().unlock();
         }
     }
 
@@ -78,6 +88,8 @@ public class AccountDaoImpl implements AccountDao {
 
     @Override
     public void withdrawMoney(final String accountId, final BigDecimal amountToWithdraw) throws NotFoundException, NotSufficientBalanceException {
+        accountDatabseLock.writeLock().lock();
+        try {
         Optional<Account> account = accountsDatabase.values().stream().filter(acc -> acc.getAccountID().equals(accountId)).findFirst();
         if(account.isPresent()){
             if(account.get().getBalance().compareTo(amountToWithdraw) < 0){
@@ -89,33 +101,41 @@ public class AccountDaoImpl implements AccountDao {
         else {
             throw new NotFoundException("Account number not found");
         }
+        }finally {
+            accountDatabseLock.writeLock().unlock();
+        }
     }
 
     @Override
     public void depositMoney(final String accountId, final BigDecimal amountToDeposit) throws NotFoundException {
-        Optional<Account> account = accountsDatabase.values().stream().filter(acc -> acc.getAccountID().equals(accountId)).findFirst();
-        if(account.isPresent()){
-            account.get().setBalance(account.get().getBalance().add(amountToDeposit));
-            accountsDatabase.put(accountId, account.get());
-        }
-        else {
-            throw new NotFoundException("Account number not found");
+        accountDatabseLock.writeLock().lock();
+        try {
+            Optional<Account> account = accountsDatabase.values().stream().filter(acc -> acc.getAccountID().equals(accountId)).findFirst();
+            if (account.isPresent()) {
+                account.get().setBalance(account.get().getBalance().add(amountToDeposit));
+                accountsDatabase.put(accountId, account.get());
+            } else {
+                throw new NotFoundException("Account number not found");
+            }
+        }finally {
+            accountDatabseLock.writeLock().unlock();
         }
     }
 
     @Override
     public void makePayment(String transferFrom, String transferTo, BigDecimal amountToTransfer) throws NotSufficientBalanceException, NotFoundException {
-        synchronized (accountsDatabase.get(transferFrom)) { //lock the account rows you are going to make transactions on to avoid concurrency problems.
-            synchronized (accountsDatabase.get(transferTo)) {
-                Account transferFromAccount = this.getAccount(transferFrom);
-                Account transferToAccount = this.getAccount(transferTo);
-                if (transferFromAccount.getBalance().compareTo(amountToTransfer) < 0) {
-                    throw new NotSufficientBalanceException("Balance is not sufficient to make transaction");
-                } else {
-                    transferFromAccount.setBalance(transferFromAccount.getBalance().subtract(amountToTransfer));
-                    transferToAccount.setBalance(transferToAccount.getBalance().add(amountToTransfer));
-                }
+        accountDatabseLock.writeLock().lock();
+        try {
+            Account transferFromAccount = this.getAccount(transferFrom);
+            Account transferToAccount = this.getAccount(transferTo);
+            if (transferFromAccount.getBalance().compareTo(amountToTransfer) < 0) {
+                throw new NotSufficientBalanceException("Balance is not sufficient to make transaction");
+            } else {
+                transferFromAccount.setBalance(transferFromAccount.getBalance().subtract(amountToTransfer));
+                transferToAccount.setBalance(transferToAccount.getBalance().add(amountToTransfer));
             }
+        }finally {
+            accountDatabseLock.writeLock().unlock();
         }
     }
 

@@ -39,7 +39,7 @@ public class MoneyTransferAPI {
                     new StandardResponse(StatusResponse.ERROR, "Not found")));
         });
         exception(AlreadyExistException.class, (e, req, res) -> {
-            res.status(HttpStatus.CONFLICT_409);
+            res.status(HttpStatus.BAD_REQUEST_400);
             res.body(new Gson().toJson(
                     new StandardResponse(StatusResponse.ERROR, "Already exists")));
         });
@@ -64,7 +64,7 @@ public class MoneyTransferAPI {
                     new StandardResponse(StatusResponse.ERROR, "Insufficient arguments provided")));
         });
         exception(Exception.class, (e, req, res) -> {
-            res.status(HttpStatus.BAD_REQUEST_400);
+            res.status(HttpStatus.INTERNAL_SERVER_ERROR_500);
             res.body(new Gson().toJson(
                     new StandardResponse(StatusResponse.ERROR, "The system did not respond properly")));
         });

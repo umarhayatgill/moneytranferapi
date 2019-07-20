@@ -46,20 +46,19 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void withdrawMoney(final String accountId, final BigDecimal amountToWithdraw) throws NotFoundException, NotSufficientBalanceException {
-        accountDao.withdrawMoney(accountId, amountToWithdraw);
+    public void withdrawMoney(final String accountId, final String amountToWithdraw) throws NotFoundException, NotSufficientBalanceException {
+        BigDecimal amountToWithdrawInDecimal = BigDecimal.valueOf(Long.valueOf(amountToWithdraw));
+        accountDao.withdrawMoney(accountId, amountToWithdrawInDecimal);
     }
 
     @Override
-    public void depositMoney(final String accountId, final BigDecimal amountToWithdraw) throws NotFoundException, NotSufficientBalanceException {
-        accountDao.depositMoney(accountId, amountToWithdraw);
+    public void depositMoney(final String accountId, final String amountToWithdraw) throws NotFoundException, NotSufficientBalanceException {
+        BigDecimal amountToWithdrawInDecimal = BigDecimal.valueOf(Long.valueOf(amountToWithdraw));
+        accountDao.depositMoney(accountId, amountToWithdrawInDecimal);
     }
 
     @Override
     public void makePayment(final String transferFrom, final String transferTo, final String amountToTransfer) throws NotSufficientBalanceException, NotFoundException, SameAccountException {
-        Objects.requireNonNull(transferFrom);
-        Objects.requireNonNull(transferTo);
-        Objects.requireNonNull(amountToTransfer);
         if(transferFrom.equals(transferTo)){
             throw new SameAccountException("Amount can not be transferred between same accounts");
         }

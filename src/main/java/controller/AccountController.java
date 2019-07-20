@@ -7,6 +7,7 @@ import static spark.Spark.put;
 
 import java.math.BigDecimal;
 import java.util.Currency;
+import java.util.Objects;
 
 import com.google.gson.Gson;
 
@@ -33,27 +34,29 @@ public class AccountController {
 
         //get account details by account id
         get("/account/:id", (req, res) -> {
-            String id = req.params(":id");
+            String accountId = Objects.requireNonNull(req.params(":id"));
             return new Gson().toJson(
                     new StandardResponse(StatusResponse.SUCCESS,new Gson()
-                            .toJsonTree(accountService.getAccount(id))));
+                            .toJsonTree(accountService.getAccount(accountId))));
         });
 
         //get balance of account
         get("/account/:id/balance", (req, res) -> {
-            res.type("application/json");
-            String id = req.params(":id");
+            String accountId = Objects.requireNonNull(req.params(":id"));
             return new Gson().toJson(
                     new StandardResponse(StatusResponse.SUCCESS,new Gson()
-                            .toJsonTree(accountService.getAccountBalance(id))));
+                            .toJsonTree(accountService.getAccountBalance(accountId))));
         });
 
         //create a new account
         put("/account/:id", (req, res) -> {
-            String accountId = req.params(":id");
-            Account account = Account.builder().withAccountID(accountId).withUserId(req.queryParams("userId"))
-                    .withBalance(BigDecimal.valueOf(Long.valueOf(req.queryParams("balance")))).
-                            withCurrency(Currency.getInstance(req.queryParams("currencyCode"))).build();
+            String accountId = Objects.requireNonNull(req.params(":id"));
+            String userId = Objects.requireNonNull(req.queryParams("userId"));
+            String balance = Objects.requireNonNull(req.queryParams("balance"));
+            String currencyCode = Objects.requireNonNull(req.queryParams("currencyCode"));
+            Account account = Account.builder().withAccountID(accountId).withUserId(userId)
+                    .withBalance(BigDecimal.valueOf(Long.valueOf(balance))).
+                            withCurrency(Currency.getInstance(currencyCode)).build();
             accountService.createAccount(account);
             return new Gson().toJson(
                     new StandardResponse(StatusResponse.SUCCESS,"New account has been created"));
@@ -61,7 +64,7 @@ public class AccountController {
 
         //delete a particular account
         delete("/account/:id", (req, res) -> {
-            String accountId = req.params(":id");
+            String accountId = Objects.requireNonNull(req.params(":id"));
             accountService.deleteAccount(accountId);
             return new Gson().toJson(
                     new StandardResponse(StatusResponse.SUCCESS,
@@ -70,8 +73,8 @@ public class AccountController {
 
         //withdraw money from account
         put("/account/:id/withdraw/:amount", (req, res) -> {
-            String accountId = req.params(":id");
-            BigDecimal amountToWithdraw = BigDecimal.valueOf(Long.valueOf(req.params(":amount")));
+            String accountId = Objects.requireNonNull(req.params(":id"));
+            String amountToWithdraw = Objects.requireNonNull(req.params(":amount"));
             accountService.withdrawMoney(accountId, amountToWithdraw);
             return new Gson().toJson(
                     new StandardResponse(StatusResponse.SUCCESS,
@@ -80,8 +83,8 @@ public class AccountController {
 
         //deposit money to account
         put("/account/:id/deposit/:amount", (req, res) -> {
-            String accountId = req.params(":id");
-            BigDecimal amountToDeposit = BigDecimal.valueOf(Long.valueOf(req.params(":amount")));
+            String accountId = Objects.requireNonNull(req.params(":id"));
+            String amountToDeposit = Objects.requireNonNull(req.params(":amount"));
             accountService.depositMoney(accountId, amountToDeposit);
             return new Gson().toJson(
                     new StandardResponse(StatusResponse.SUCCESS,
@@ -91,9 +94,9 @@ public class AccountController {
 
         post("/moneytransfer", (req, res) ->
         {
-            String fromAccountId = req.queryParams("fromAccountId");
-            String toAccountId = req.queryParams("toAccountId");
-            String amountToTransfer = req.queryParams("amountToTransfer");
+            String fromAccountId = Objects.requireNonNull(req.queryParams("fromAccountId"));
+            String toAccountId = Objects.requireNonNull(req.queryParams("toAccountId"));
+            String amountToTransfer = Objects.requireNonNull(req.queryParams("amountToTransfer"));
             accountService.makePayment(fromAccountId, toAccountId, amountToTransfer);
             return new Gson().toJson(
                     new StandardResponse(StatusResponse.SUCCESS,

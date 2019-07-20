@@ -21,12 +21,10 @@ dependencyinjection/daggermodules/UserServiceModule.class
 dao/UserDao.class
 controller/AccountController.class
 dependencyinjection/daggercomponents/DaggerAccountServiceComponent$Builder.class
-service/AccountServiceImpl_Factory.class
 service/AccountServiceImpl.class
 dependencyinjection/daggercomponents/AccountServiceComponent.class
 exception/SameAccountException.class
 response/StatusResponse.class
-service/UserServiceImpl_Factory.class
 exception/NotSufficientBalanceException.class
 dao/AccountDaoImpl.class
 model/User.class

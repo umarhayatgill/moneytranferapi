@@ -15,7 +15,7 @@ public interface AccountService {
     BigDecimal getAccountBalance(String accoundId) throws NotFoundException;
     void deleteAccount(String accoundId) throws NotFoundException;
     void createAccount(Account account) throws AlreadyExistException;
-    void withdrawMoney(String accountId, BigDecimal amountToWithdraw) throws NotFoundException, NotSufficientBalanceException;
-    void depositMoney(String accountId, BigDecimal amountToWithdraw) throws NotFoundException, NotSufficientBalanceException;
+    void withdrawMoney(String accountId, String amountToWithdraw) throws NotFoundException, NotSufficientBalanceException;
+    void depositMoney(String accountId, String amountToWithdraw) throws NotFoundException, NotSufficientBalanceException;
     void makePayment(String transferFrom, String transferTo, String amountToTransfer) throws NotSufficientBalanceException, NotFoundException, SameAccountException;
 }

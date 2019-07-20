@@ -6,6 +6,7 @@ import static org.mockito.Mockito.verify;
 import dao.AccountDao;
 import exception.NotSufficientBalanceException;
 import exception.SameAccountException;
+import model.Account;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,6 +25,7 @@ import java.math.BigDecimal;
 @RunWith(MockitoJUnitRunner.class)
 public class AccountServiceUnitTest {
     AccountDao accountDao = mock(AccountDao.class);
+    Account account = mock(Account.class);
     @InjectMocks
     AccountServiceImpl accountServiceImpl;
 
@@ -39,26 +41,26 @@ public class AccountServiceUnitTest {
     }
     @Test
     public void callDaoGetUserByIdWhenServiceGetUserByIdIsCalled() throws NotFoundException {
-        given(accountDao.getAccount("1")).willReturn(null);
+        given(accountDao.getAccount("1")).willReturn(account);
         accountServiceImpl.getAccount("1");
         verify(accountDao,times(1)).getAccount("1");
     }
     @Test
     public void callDaoCreateUserWhenServiceCreateUserByIdIsCalled() throws AlreadyExistException {
-        accountServiceImpl.createAccount(null);
-        verify(accountDao,times(1)).createAccount(null);
+        accountServiceImpl.createAccount(account);
+        verify(accountDao,times(1)).createAccount(account);
     }
 
     @Test
     public void callDaoDepositMoneyWhenServiceDepositMoneyIsCalled() throws AlreadyExistException, NotFoundException, NotSufficientBalanceException {
-        accountServiceImpl.depositMoney(null, null);
-        verify(accountDao,times(1)).depositMoney(null,null);
+        accountServiceImpl.depositMoney("1", "10");
+        verify(accountDao,times(1)).depositMoney("1", BigDecimal.valueOf(10));
     }
 
     @Test
     public void callDaoWithdrawMoneyWhenServiceWithdrawMoneyIsCalled() throws AlreadyExistException, NotFoundException, NotSufficientBalanceException {
-        accountServiceImpl.depositMoney(null, null);
-        verify(accountDao,times(1)).depositMoney(null,null);
+        accountServiceImpl.depositMoney("1", "10");
+        verify(accountDao,times(1)).depositMoney("1",BigDecimal.valueOf(10));
     }
 
     @Test

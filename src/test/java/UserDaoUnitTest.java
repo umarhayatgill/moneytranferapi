@@ -1,23 +1,14 @@
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
-import java.util.Collection;
-import java.util.List;
-
-import org.junit.Assert;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.runners.MethodSorters;
-
-import io.cucumber.java.mk_latn.No;
-
 import dao.UserDao;
 import dao.UserDaoImpl;
 import exception.AlreadyExistException;
 import exception.NotFoundException;
 import model.User;
+import org.junit.Assert;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+import org.junit.runners.MethodSorters;
+
+import java.util.Collection;
 
 //in case of real database we would have to rollback the trasanctions after every test so that we leave database in the same state
 //as it was before the tests as we do in case of exceptions at Dao Layer
