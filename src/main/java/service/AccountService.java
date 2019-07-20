@@ -1,9 +1,6 @@
 package service;
 
-import exception.AlreadyExistException;
-import exception.NotFoundException;
-import exception.NotSufficientBalanceException;
-import exception.SameAccountException;
+import exception.*;
 import model.Account;
 
 import java.math.BigDecimal;
@@ -17,5 +14,5 @@ public interface AccountService {
     void createAccount(Account account) throws AlreadyExistException;
     void withdrawMoney(String accountId, String amountToWithdraw) throws NotFoundException, NotSufficientBalanceException;
     void depositMoney(String accountId, String amountToDepsit) throws NotFoundException, NotSufficientBalanceException;
-    void makePayment(String transferFrom, String transferTo, String amountToTransfer) throws NotSufficientBalanceException, NotFoundException, SameAccountException;
+    void makePayment(String transferFrom, String transferTo, String amountToTransfer) throws NotSufficientBalanceException, NotFoundException, SameAccountException, InvalidAmountException;
 }

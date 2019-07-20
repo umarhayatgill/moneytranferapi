@@ -7,6 +7,8 @@ import org.junit.Test;
 
 import static java.lang.Thread.sleep;
 
+//final block in the end of every test to perform rollback manually since for the simplicity of in memory datastore
+//i did not use real database where i could have used database rollback feature to declare tests to rollback after each test
 public class MoneyTransferApiFunctionalTest {
     TestResponse res;
     @Before

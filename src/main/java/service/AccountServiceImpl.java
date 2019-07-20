@@ -3,10 +3,7 @@ package service;
 import dao.AccountDao;
 import dao.AccountDaoImpl;
 import dao.UserDao;
-import exception.AlreadyExistException;
-import exception.NotFoundException;
-import exception.NotSufficientBalanceException;
-import exception.SameAccountException;
+import exception.*;
 import model.Account;
 
 import javax.inject.Inject;
@@ -58,11 +55,14 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void makePayment(final String transferFrom, final String transferTo, final String amountToTransfer) throws NotSufficientBalanceException, NotFoundException, SameAccountException {
+    public void makePayment(final String transferFrom, final String transferTo, final String amountToTransfer) throws NotSufficientBalanceException, NotFoundException, SameAccountException, InvalidAmountException {
         if(transferFrom.equals(transferTo)){
             throw new SameAccountException("Amount can not be transferred between same accounts");
         }
         BigDecimal amountToTransferInDecimal = BigDecimal.valueOf(Long.valueOf(amountToTransfer));
+        if(amountToTransferInDecimal.compareTo(BigDecimal.ZERO) <= 0 ){ //if amountToTransfer is not a natural number
+            throw new InvalidAmountException("Invalid amount entered");
+        }
         accountDao.makePayment(transferFrom, transferTo, amountToTransferInDecimal);
     }
 }

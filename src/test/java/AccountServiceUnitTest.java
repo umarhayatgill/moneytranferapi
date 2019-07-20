@@ -4,8 +4,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import dao.AccountDao;
-import exception.NotSufficientBalanceException;
-import exception.SameAccountException;
+import exception.*;
 import model.Account;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,8 +14,6 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import dao.UserDao;
-import exception.AlreadyExistException;
-import exception.NotFoundException;
 import service.AccountServiceImpl;
 import service.UserServiceImpl;
 
@@ -52,19 +49,19 @@ public class AccountServiceUnitTest {
     }
 
     @Test
-    public void callDaoDepositMoneyWhenServiceDepositMoneyIsCalled() throws AlreadyExistException, NotFoundException, NotSufficientBalanceException {
+    public void callDaoDepositMoneyWhenServiceDepositMoneyIsCalled() throws NotFoundException, NotSufficientBalanceException {
         accountServiceImpl.depositMoney("1", "10");
         verify(accountDao,times(1)).depositMoney("1", BigDecimal.valueOf(10));
     }
 
     @Test
-    public void callDaoWithdrawMoneyWhenServiceWithdrawMoneyIsCalled() throws AlreadyExistException, NotFoundException, NotSufficientBalanceException {
+    public void callDaoWithdrawMoneyWhenServiceWithdrawMoneyIsCalled() throws NotFoundException, NotSufficientBalanceException {
         accountServiceImpl.depositMoney("1", "10");
         verify(accountDao,times(1)).depositMoney("1",BigDecimal.valueOf(10));
     }
 
     @Test
-    public void callDaoMakePaymentWhenServiceMakePaymentIsCalled() throws AlreadyExistException, NotFoundException, NotSufficientBalanceException, SameAccountException {
+    public void callDaoMakePaymentWhenServiceMakePaymentIsCalled() throws NotFoundException, NotSufficientBalanceException, SameAccountException, InvalidAmountException {
         accountServiceImpl.makePayment("1", "2","50");
         verify(accountDao,times(1)).makePayment("1","2", BigDecimal.valueOf(50));
     }

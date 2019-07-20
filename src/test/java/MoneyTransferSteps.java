@@ -55,7 +55,8 @@ public class MoneyTransferSteps {
         JsonElement jsonElement = testResponse.jsonElement();
         assertEquals(BigDecimal.valueOf(1200), jsonElement.getAsJsonObject().get("data").getAsJsonObject().get("balance").getAsBigDecimal());
     }
-
+    //Performing rollback manually since for the simplicity of in memory datastore
+//i did not use real database where i could have used database rollback feature to declare tests to rollback after each test
     @After
     public void rollback(){
         Util.request("POST", "/moneytransfer?fromAccountId="+this.toUserAccountId+

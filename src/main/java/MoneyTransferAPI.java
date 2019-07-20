@@ -1,10 +1,7 @@
 import com.google.gson.Gson;
 import controller.AccountController;
 import controller.UserController;
-import exception.AlreadyExistException;
-import exception.NotFoundException;
-import exception.NotSufficientBalanceException;
-import exception.SameAccountException;
+import exception.*;
 import org.eclipse.jetty.http.HttpStatus;
 import response.StandardResponse;
 import response.StatusResponse;
@@ -18,7 +15,7 @@ public class MoneyTransferAPI {
     }
 
     private static void startSparkApplication() {
-        exceptionHandling();
+        setExceptionHandlers();
         setResponseType();
         UserController userController = new UserController();
         userController.registerUserApiRoutes();
@@ -32,26 +29,26 @@ public class MoneyTransferAPI {
         });
     }
 
-    private static void exceptionHandling() {
+    private static void setExceptionHandlers() {
         exception(NotFoundException.class, (e, req, res) -> {
             res.status(HttpStatus.BAD_REQUEST_400);
             res.body(new Gson().toJson(
-                    new StandardResponse(StatusResponse.ERROR, "Not found")));
+                    new StandardResponse(StatusResponse.ERROR, e.getMessage())));
         });
         exception(AlreadyExistException.class, (e, req, res) -> {
             res.status(HttpStatus.BAD_REQUEST_400);
             res.body(new Gson().toJson(
-                    new StandardResponse(StatusResponse.ERROR, "Already exists")));
+                    new StandardResponse(StatusResponse.ERROR, e.getMessage())));
         });
         exception(NotSufficientBalanceException.class, (e, req, res) -> {
             res.status(HttpStatus.BAD_REQUEST_400);
             res.body(new Gson().toJson(
-                    new StandardResponse(StatusResponse.ERROR, "You do not have sufficient balance to transfer")));
+                    new StandardResponse(StatusResponse.ERROR, e.getMessage())));
         });
         exception(SameAccountException.class, (e, req, res) -> {
             res.status(HttpStatus.BAD_REQUEST_400);
             res.body(new Gson().toJson(
-                    new StandardResponse(StatusResponse.ERROR, "Ammount can not be transferred between same accounts")));
+                    new StandardResponse(StatusResponse.ERROR, e.getMessage())));
         });
         exception(IllegalArgumentException.class, (e, req, res) -> {
             res.status(HttpStatus.BAD_REQUEST_400);
@@ -63,10 +60,17 @@ public class MoneyTransferAPI {
             res.body(new Gson().toJson(
                     new StandardResponse(StatusResponse.ERROR, "Insufficient arguments provided")));
         });
+        exception(InvalidAmountException.class, (e, req, res) -> {
+            res.status(HttpStatus.BAD_REQUEST_400);
+            res.body(new Gson().toJson(
+                    new StandardResponse(StatusResponse.ERROR, e.getMessage())));
+        });
         exception(Exception.class, (e, req, res) -> {
             res.status(HttpStatus.INTERNAL_SERVER_ERROR_500);
             res.body(new Gson().toJson(
                     new StandardResponse(StatusResponse.ERROR, "The system did not respond properly")));
         });
+
+
     }
 }

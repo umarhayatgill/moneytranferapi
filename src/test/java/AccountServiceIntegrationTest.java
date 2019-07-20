@@ -1,9 +1,6 @@
 import dependencyinjection.daggercomponents.AccountServiceComponent;
 import dependencyinjection.daggercomponents.DaggerAccountServiceComponent;
-import exception.AlreadyExistException;
-import exception.NotFoundException;
-import exception.NotSufficientBalanceException;
-import exception.SameAccountException;
+import exception.*;
 import model.Account;
 import org.junit.Assert;
 import org.junit.Test;
@@ -13,6 +10,8 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Currency;
 
+//final block in the end of every test to perform rollback manually since for the simplicity of in memory datastore
+//i did not use real database where i could have used database rollback feature to declare tests to rollback after each test
 public class AccountServiceIntegrationTest {
     AccountServiceComponent accountServiceComponent = DaggerAccountServiceComponent.create();
     AccountService accountService = accountServiceComponent.buildAccountService();
@@ -73,7 +72,7 @@ public class AccountServiceIntegrationTest {
     }
 
     @Test
-    public void transferMoneyBetweenAccount() throws NotSufficientBalanceException, NotFoundException, SameAccountException {
+    public void transferMoneyBetweenAccount() throws NotSufficientBalanceException, NotFoundException, SameAccountException, InvalidAmountException {
         try {
             BigDecimal amountFromAccountBeforeDeposit = accountService.getAccountBalance("1");
             BigDecimal amountToAccountBeforeDeposit = accountService.getAccountBalance("2");

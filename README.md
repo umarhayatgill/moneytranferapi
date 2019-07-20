@@ -61,8 +61,8 @@ Since for the sake of this test, the datastore was in memory, i could
 not use transactional features of database with rollback option but in
 real systems for testing, it it necessary to perform tests in transactional
 manner and rollback after running each transaction to persist the data.
-I have highlighted this point by doing the reverse of transaction 
-on the end of few tests.
+I have highlighted this point by doing the reverse of transaction in the
+final blocks of every test which included database calls.
 
 
 

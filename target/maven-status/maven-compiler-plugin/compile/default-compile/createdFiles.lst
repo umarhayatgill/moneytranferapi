@@ -36,4 +36,5 @@ MoneyTransferAPI.class
 service/AccountService.class
 dependencyinjection/daggermodules/AccountServiceModule_ProvideAccountServiceFactory.class
 dependencyinjection/daggercomponents/UserServiceComponent.class
+exception/InvalidAmountException.class
 exception/NotFoundException.class
