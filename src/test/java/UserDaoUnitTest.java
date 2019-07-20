@@ -48,8 +48,6 @@ public class UserDaoUnitTest {
     @Test(expected = NotFoundException.class)
     public void deleteExistingUserThrowsExceptionIfInvalid() throws NotFoundException {
         userDao.deleteUser("4");
-        Collection<User> users = userDao.getAllUsers();
-        Assert.assertEquals(users.size(),2);
     }
 
 }
