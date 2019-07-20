@@ -41,10 +41,10 @@ public class AccountServiceIntegrationTest {
         try {
             accountService.deleteAccount("2");
             Collection<Account> accounts = accountService.getAllAccounts();
-            Assert.assertEquals(accounts.size(), 1);
+            Assert.assertEquals(1, accounts.size());
         }finally {
             Account account = Account.builder().withAccountID("2").withUserId("2")
-                    .withBalance(BigDecimal.valueOf(20)).withCurrency(Currency.getInstance("EUR")).build();
+                    .withBalance(BigDecimal.valueOf(1000)).withCurrency(Currency.getInstance("EUR")).build();
             accountService.createAccount(account);
         }
     }
@@ -81,7 +81,7 @@ public class AccountServiceIntegrationTest {
             Assert.assertEquals(amountFromAccountBeforeDeposit.subtract(BigDecimal.valueOf(10)), accountService.getAccountBalance("1"));
             Assert.assertEquals(amountToAccountBeforeDeposit.add(BigDecimal.valueOf(10)), accountService.getAccountBalance("2"));
         }finally {
-            accountService.makePayment("2","1","0");
+            accountService.makePayment("2","1","10");
         }
     }
 }

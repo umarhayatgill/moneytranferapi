@@ -17,46 +17,59 @@ public class MoneyTransferApiFunctionalTest {
 
     @Test
     public void userAccountShouldBeCreated() {
+        try {
+            //WHEN
+            res = Util.request("PUT", "/account/4?userId=1&balance=200&currencyCode=EUR");
 
-        //WHEN
-        res = Util.request("PUT", "/account/4?userId=1&balance=200&currencyCode=EUR");
-
-        //THEN
-        JsonElement json = res.jsonElement();
-        Assert.assertEquals(200, res.status);
+            //THEN
+            JsonElement json = res.jsonElement();
+            Assert.assertEquals(200, res.status);
+        }finally {
+            Util.request("DELETE", "/account/4");
+        }
     }
 
 
     @Test
     public void moneyIsSuccesfullyTransferredBetweenAccounts() {
+        try {
+            //WHEN
+            res = Util.request("POST", "/moneytransfer?fromAccountId=1&toAccountId=2&amountToTransfer=20");
 
-        //WHEN
-        res = Util.request("POST", "/moneytransfer?fromAccountId=1&toAccountId=2&amountToTransfer=20");
-
-        //THEN
-        JsonElement json = res.jsonElement();
-        Assert.assertEquals(200, res.status);
+            //THEN
+            JsonElement json = res.jsonElement();
+            Assert.assertEquals(200, res.status);
+        }finally {
+            Util.request("POST", "/moneytransfer?fromAccountId=2&toAccountId=1&amountToTransfer=20");
+        }
     }
 
     @Test
     public void moneyShouldBeSuccessfullyWIthdrawnFromAnAccount() {
 
-        //WHEN
-        res = Util.request("PUT", "/account/2/withdraw/20");
+        try {
+            //WHEN
+            res = Util.request("PUT", "/account/2/withdraw/20");
 
-        //THEN
-        JsonElement json = res.jsonElement();
-        Assert.assertEquals(200, res.status);
+            //THEN
+            JsonElement json = res.jsonElement();
+            Assert.assertEquals(200, res.status);
+        }finally {
+            Util.request("PUT", "/account/2/deposit/20");
+        }
     }
 
     @Test
     public void moneyShouldBeSuccessfullyDepositedToAnAccount() {
+        try {
+            //WHEN
+            res = Util.request("PUT", "/account/2/deposit/20");
 
-        //WHEN
-        res = Util.request("PUT", "/account/2/deposit/20");
-
-        //THEN
-        JsonElement json = res.jsonElement();
-        Assert.assertEquals(200, res.status);
+            //THEN
+            JsonElement json = res.jsonElement();
+            Assert.assertEquals(200, res.status);
+        }finally {
+            Util.request("PUT", "/account/2/withdraw/20");
+        }
     }
 }

@@ -30,35 +30,51 @@ public class AccountControllerIntegrationTest {
 
     @Test
     public void aNewAccountShouldBeCreated() {
-        TestResponse res = Util.request("PUT", "/account/3?userId=1&balance=200&currencyCode=EUR");
-        Assert.assertEquals(200, res.status);
+        try {
+            TestResponse res = Util.request("PUT", "/account/3?userId=1&balance=200&currencyCode=EUR");
+            Assert.assertEquals(200, res.status);
+        }finally {
+            Util.request("DELETE", "/account/3");
+        }
     }
 
     @Test
     public void amountCanBeDepositedInAnAccount() {
-        TestResponse res = Util.request("PUT", "/account/2/deposit/20");
-        Assert.assertEquals(200, res.status);
+        try {
+            TestResponse res = Util.request("PUT", "/account/2/deposit/20");
+            Assert.assertEquals(200, res.status);
+        }finally {
+            Util.request("PUT", "/account/2/withdraw/20");
+        }
     }
 
     @Test
     public void amountCanBeWithdrawnFromAnAccount() {
-        TestResponse res = Util.request("PUT", "/account/2/withdraw/20");
-        Assert.assertEquals(200, res.status);
+        try {
+            TestResponse res = Util.request("PUT", "/account/2/withdraw/20");
+            Assert.assertEquals(200, res.status);
+        }finally {
+            Util.request("PUT", "/account/2/deposit/20");
+        }
     }
 
     @Test
     public void balanceForAnAccountShouldBeCorrect() {
-        TestResponse res = Util.request("GET", "/account/3/balance");
+        TestResponse res = Util.request("GET", "/account/2/balance");
         JsonElement json = res.jsonElement();
         Assert.assertEquals(200, res.status);
-        assertEquals(BigDecimal.valueOf(200), json.getAsJsonObject().get("data").getAsBigDecimal());
+        assertEquals(BigDecimal.valueOf(1000), json.getAsJsonObject().get("data").getAsBigDecimal());
     }
 
 
     @Test
     public void anExistingAccountShouldBeDeleted() {
-        TestResponse res = Util.request("DELETE", "/account/3");
-        JsonElement json = res.jsonElement();
-        Assert.assertEquals(200, res.status);
+        try {
+            TestResponse res = Util.request("DELETE", "/account/2");
+            JsonElement json = res.jsonElement();
+            Assert.assertEquals(200, res.status);
+        }finally {
+            Util.request("PUT", "/account/2?userId=2&balance=1000&currencyCode=EUR");
+        }
     }
 }

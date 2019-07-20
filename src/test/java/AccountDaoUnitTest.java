@@ -21,8 +21,12 @@ public class AccountDaoUnitTest {
     private AccountDao accountDao = AccountDaoImpl.getInstance();
 
     @Before
-    public void givenThatWeHaveSufficientFunds() throws NotFoundException {
-        accountDao.depositMoney("1", BigDecimal.valueOf(200));
+    public void depositMoneyIntoAccount() throws NotFoundException, NotSufficientBalanceException {
+        try {
+            accountDao.depositMoney("1", BigDecimal.valueOf(200));
+        }finally {
+            accountDao.withdrawMoney("1", BigDecimal.valueOf(200));
+        }
     }
 
     @Test

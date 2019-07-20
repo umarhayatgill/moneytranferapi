@@ -22,11 +22,15 @@ public class UserDaoUnitTest {
         Assert.assertEquals(users.size(),2);
     }
     @Test
-    public void createNewUser() throws AlreadyExistException {
-        User user = User.builder().withId("3").withFirstName("umar").withLastName("hayat").withEmail("abc@kk.com").build();
-        userDao.createUser(user);
-        Collection<User> users = userDao.getAllUsers();
-        Assert.assertEquals(users.size(),3);
+    public void createNewUser() throws AlreadyExistException, NotFoundException {
+        try {
+            User user = User.builder().withId("3").withFirstName("umar").withLastName("hayat").withEmail("abc@kk.com").build();
+            userDao.createUser(user);
+            Collection<User> users = userDao.getAllUsers();
+            Assert.assertEquals(users.size(), 3);
+        }finally {
+            userDao.deleteUser("3");
+        }
     }
 
 

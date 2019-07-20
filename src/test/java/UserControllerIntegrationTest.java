@@ -27,24 +27,32 @@ public class UserControllerIntegrationTest {
 
     @Test
     public void aNewUserShouldBeCreated() {
-        TestResponse res = Util.request("POST", "/user/3?firstName=umar&lastName=hayat&email=umarhayat@foobar.com");
-        JsonElement json = res.jsonElement();
-        Assert.assertEquals(200, res.status);
-    }
+            TestResponse res = Util.request("POST", "/user/3?firstName=umar&lastName=hayat&email=umarhayat@foobar.com");
+            JsonElement json = res.jsonElement();
+            Assert.assertEquals(200, res.status);
+        }
 
     @Test
     public void anExistingUserShouldBeUpdated() {
-        TestResponse res = Util.request("PUT", "/user/3?firstName=umar&lastName=hayatgill&email=umarhayatgill@foobar.com");
-        JsonElement json = res.jsonElement();
-        Assert.assertEquals(200, res.status);
-        assertEquals("hayatgill", json.getAsJsonObject().get("data").getAsJsonObject().get("lastName").getAsString());
-        assertEquals("umarhayatgill@foobar.com", json.getAsJsonObject().get("data").getAsJsonObject().get("email").getAsString());
+        try {
+            TestResponse res = Util.request("PUT", "/user/3?firstName=umar&lastName=hayatgill&email=umarhayatgill@foobar.com");
+            JsonElement json = res.jsonElement();
+            Assert.assertEquals(200, res.status);
+            assertEquals("hayatgill", json.getAsJsonObject().get("data").getAsJsonObject().get("lastName").getAsString());
+            assertEquals("umarhayatgill@foobar.com", json.getAsJsonObject().get("data").getAsJsonObject().get("email").getAsString());
+        }finally {
+            Util.request("DELETE", "/user/3");
+        }
     }
 
     @Test
     public void anExistingUserShouldBeDeleted() {
-        TestResponse res = Util.request("DELETE", "/user/3");
-        JsonElement json = res.jsonElement();
-        Assert.assertEquals(200, res.status);
+        try {
+            TestResponse res = Util.request("DELETE", "/user/2");
+            JsonElement json = res.jsonElement();
+            Assert.assertEquals(200, res.status);
+        }finally {
+            Util.request("POST", "/user/2?firstName=umar&lastName=hayatgill&email=umarhayatgill@foobar.com");
+        }
     }
 }

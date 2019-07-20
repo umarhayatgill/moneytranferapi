@@ -1,6 +1,8 @@
 import com.google.gson.JsonElement;
 import helper.TestResponse;
 import helper.Util;
+
+import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -52,5 +54,11 @@ public class MoneyTransferSteps {
         assertEquals(200, testResponse.status);
         JsonElement jsonElement = testResponse.jsonElement();
         assertEquals(BigDecimal.valueOf(1200), jsonElement.getAsJsonObject().get("data").getAsJsonObject().get("balance").getAsBigDecimal());
+    }
+
+    @After
+    public void rollback(){
+        Util.request("POST", "/moneytransfer?fromAccountId="+this.toUserAccountId+
+                "&toAccountId="+this.fromUserAccountId+"&amountToTransfer="+this.balanceToTransfer);
     }
 }
