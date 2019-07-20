@@ -5,7 +5,6 @@ import exception.NotFoundException;
 import model.User;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -18,10 +17,10 @@ public class UserDaoImpl implements UserDao {
         //in memory database for the sake of simplicity of task
         user = User.builder().withId("1").withFirstName("foo")
                 .withLastName("bar").withEmail("foo@bar.com").build();
-        usersDatabase.put(user.getId(), user);
+        usersDatabase.put(user.getUserId(), user);
         user = User.builder().withId("2").withFirstName("anotherfoo")
                 .withLastName("anotherbar").withEmail("anotherfoo@anotherbar.com").build();
-        usersDatabase.put(user.getId(), user);
+        usersDatabase.put(user.getUserId(), user);
     }
 
     //we can place synchronized inside method as well with double lock checking
@@ -40,13 +39,13 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User getUser(String id) throws NotFoundException {
-        return usersDatabase.values().stream().filter(user -> user.getId().equals(id)).findFirst()
+        return usersDatabase.values().stream().filter(user -> user.getUserId().equals(id)).findFirst()
                 .orElseThrow(() -> new NotFoundException("User not found"));
     }
 
     @Override
     public void createUser(User user) throws AlreadyExistException {
-        if(this.userExist(user.getId())){
+        if(this.userExist(user.getUserId())){
             throw new AlreadyExistException("User already exists in database");
         }else {
             Objects.requireNonNull(
@@ -55,20 +54,20 @@ public class UserDaoImpl implements UserDao {
                     user.getLastName(), "Last Name cannot be null");
             Objects.requireNonNull(
                     user.getEmail(), "Email cannot be null");
-            usersDatabase.put(user.getId(), user);
+            usersDatabase.put(user.getUserId(), user);
         }
     }
 
     @Override
     public User updateUser(User user) throws NotFoundException {
-        if(this.userExist(user.getId())){
+        if(this.userExist(user.getUserId())){
             Objects.requireNonNull(
                     user.getFirstName(), "First Name cannot be null");
             Objects.requireNonNull(
                     user.getLastName(), "Last Name cannot be null");
             Objects.requireNonNull(
                     user.getEmail(), "Email cannot be null");
-            usersDatabase.put(user.getId(), user);
+            usersDatabase.put(user.getUserId(), user);
         }else {
             throw new NotFoundException("User with this id does not exists in database");
         }
@@ -78,7 +77,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public boolean userExist(String id) {
         boolean userExist = false;
-        if(usersDatabase.values().stream().anyMatch(user -> user.getId().equals(id))){
+        if(usersDatabase.values().stream().anyMatch(user -> user.getUserId().equals(id))){
             userExist=true;
         }
         return userExist;

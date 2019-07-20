@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.Currency;
+import java.util.Objects;
 
 public class Account {
     private String accountID;
@@ -73,5 +74,18 @@ public class Account {
         public Account build() {
             return new Account(this);
         }
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Account account = (Account) o;
+        return account.accountID.equals(accountID) &&
+                account.userId.equals(userId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(accountID, userId);
     }
 }

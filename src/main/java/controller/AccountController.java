@@ -91,7 +91,6 @@ public class AccountController {
                             "Amount has been deposited to account with id %s", accountId));
         });
 
-
         post("/moneytransfer", (req, res) ->
         {
             String fromAccountId = Objects.requireNonNull(req.queryParams("fromAccountId"));
@@ -102,8 +101,5 @@ public class AccountController {
                     new StandardResponse(StatusResponse.SUCCESS,
                             "Money has been transferred successfully"));
         });
-
-
-
     }
 }
