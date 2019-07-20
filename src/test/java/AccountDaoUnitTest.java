@@ -87,5 +87,4 @@ public class AccountDaoUnitTest {
             accountDao.makePayment("2", "1", BigDecimal.valueOf(5));
         }
     }
-
 }

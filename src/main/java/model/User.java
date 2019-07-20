@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public final class User {
+public class User {
 
     private String id;
     private String firstName;

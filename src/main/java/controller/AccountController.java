@@ -22,7 +22,7 @@ import service.UserService;
 
 public class AccountController {
     AccountServiceComponent accountServiceComponent = DaggerAccountServiceComponent.create();
-    AccountService accountService = accountServiceComponent.buildUserService();
+    AccountService accountService = accountServiceComponent.buildAccountService();
     public void registerAccountApiRoutes() {
 
         //get all accounts

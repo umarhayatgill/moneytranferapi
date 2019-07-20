@@ -7,7 +7,7 @@ mvn exec:java
 
 ### Technologies
 
-* Spark Java (Light weight framewrok for microservices and comes embedded with Jetty container)
+* Spark Java (Light weight framewrok for r with embedded Jetty container)
 * Cucumber (for acceptance testing of features)
 * Mockito (for mocking database calls in unit testing)
 * Dagger 2 for dependency injection (It is very light dependency 
@@ -31,7 +31,7 @@ Few example calls are given below.
 * localhost:4567/account/1
 * localhost:4567/account/2
 
-##### Money Transfer "POST" request
+#### Money Transfer "POST" request
 
 localhost:4567/moneytransfer?fromAccountId=1&toAccountId=2&amountToTransfer=20
 

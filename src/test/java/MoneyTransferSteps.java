@@ -43,7 +43,7 @@ public class MoneyTransferSteps {
         testResponse = Util.request("GET", "/account/"+this.fromUserAccountId);
         assertEquals(200, testResponse.status);
         JsonElement jsonElement = testResponse.jsonElement();
-        assertEquals(BigDecimal.ZERO,jsonElement.getAsJsonObject().get("data").getAsJsonObject().get("balance").getAsBigDecimal());
+        assertEquals(BigDecimal.valueOf(1800),jsonElement.getAsJsonObject().get("data").getAsJsonObject().get("balance").getAsBigDecimal());
     }
 
     @And("^receiver receives the amount$")
@@ -51,6 +51,6 @@ public class MoneyTransferSteps {
         testResponse = Util.request("GET", "/account/"+this.toUserAccountId);
         assertEquals(200, testResponse.status);
         JsonElement jsonElement = testResponse.jsonElement();
-        assertEquals(BigDecimal.valueOf(220), jsonElement.getAsJsonObject().get("data").getAsJsonObject().get("balance").getAsBigDecimal());
+        assertEquals(BigDecimal.valueOf(1200), jsonElement.getAsJsonObject().get("data").getAsJsonObject().get("balance").getAsBigDecimal());
     }
 }

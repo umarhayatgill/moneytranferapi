@@ -6,5 +6,5 @@ import service.AccountServiceImpl;
 
 @Component(modules = AccountServiceModule.class)
 public interface AccountServiceComponent {
-    AccountServiceImpl buildUserService();
+    AccountServiceImpl buildAccountService();
 }

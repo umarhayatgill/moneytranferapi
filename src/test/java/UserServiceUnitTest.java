@@ -3,6 +3,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import model.User;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,9 +16,13 @@ import exception.AlreadyExistException;
 import exception.NotFoundException;
 import service.UserServiceImpl;
 
+import java.util.Collection;
+
 @RunWith(MockitoJUnitRunner.class)
 public class UserServiceUnitTest {
     UserDao userDao = mock(UserDao.class);
+    User user = mock(User.class);
+    Collection<User> userCollection = mock(Collection.class);
     @InjectMocks
     UserServiceImpl userServiceImpl;
 
@@ -27,25 +32,25 @@ public class UserServiceUnitTest {
     }
     @Test
     public void callDaoGetUsersWhenServiceGetUsersIsCalled(){
-        given(userDao.getAllUsers()).willReturn(null);
+        given(userDao.getAllUsers()).willReturn(userCollection);
         userServiceImpl.getAllUsers();
         verify(userDao,times(1)).getAllUsers();
     }
     @Test
     public void callDaoGetUserByIdWhenServiceGetUserByIdIsCalled() throws NotFoundException {
-        given(userDao.getUser("1")).willReturn(null);
+        given(userDao.getUser("1")).willReturn(user);
         userServiceImpl.getUser("1");
         verify(userDao,times(1)).getUser("1");
     }
     @Test
     public void callDaoCreateUserWhenServiceCreateUserByIdIsCalled() throws AlreadyExistException {
-        userServiceImpl.createUser(null);
-        verify(userDao,times(1)).createUser(null);
+        userServiceImpl.createUser(user);
+        verify(userDao,times(1)).createUser(user);
     }
     @Test
     public void callDaoUpdateUserWhenServiceUpdateUserIsCalled() throws NotFoundException {
-        given(userDao.updateUser(null)).willReturn(null);
-        userServiceImpl.updateUser(null);
-        verify(userDao,times(1)).updateUser(null);
+        given(userDao.updateUser(user)).willReturn(user);
+        userServiceImpl.updateUser(user);
+        verify(userDao,times(1)).updateUser(user);
     }
 }

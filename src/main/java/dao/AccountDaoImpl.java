@@ -21,10 +21,10 @@ public class AccountDaoImpl implements AccountDao {
     //in memory database
     public AccountDaoImpl(){
         account = Account.builder().withAccountID("1").withUserId("1")
-                .withBalance(BigDecimal.valueOf(200)).withCurrency(Currency.getInstance("EUR")).build();
+                .withBalance(BigDecimal.valueOf(2000)).withCurrency(Currency.getInstance("EUR")).build();
         accountsDatabase.put(account.getAccountID(), account);
         account = Account.builder().withAccountID("2").withUserId("2")
-                .withBalance(BigDecimal.valueOf(20)).withCurrency(Currency.getInstance("EUR")).build();
+                .withBalance(BigDecimal.valueOf(1000)).withCurrency(Currency.getInstance("EUR")).build();
         accountsDatabase.put(account.getAccountID(), account);
     }
 
