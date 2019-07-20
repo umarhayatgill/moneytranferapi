@@ -70,7 +70,5 @@ public class MoneyTransferAPI {
             res.body(new Gson().toJson(
                     new StandardResponse(StatusResponse.ERROR, "The system did not respond properly")));
         });
-
-
     }
 }

@@ -60,8 +60,9 @@ into domain language. For example, it can be defined like following
 Since for the sake of this test, the datastore was in memory, i could 
 not use transactional features of database with rollback option but in
 real systems for testing, it it necessary to perform tests in transactional
-manner and rollback after running each transaction to persist the data.
-I have highlighted this point by doing the reverse of transaction in the
+manner and rollback after running each transaction to persist the data or
+use in memory databases in development environment like H2 for fast execution of tests.
+To mimic the rollback operation, I have reversed every transaction in the
 final blocks of every test which included database calls.
 
 
