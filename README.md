@@ -107,13 +107,13 @@ POST| /moneytransfer | Perform transaction between 2 user accounts
         {
             "accountID": "1",
             "userId": "1",
-            "balance": 200,
+            "balance": 1000,
             "currency": "EUR"
         }
         
         {
             "accountID": "2",
-            "userId": "2",
+            "userId": "2000",
             "balance": 20,
             "currency": "EUR"
         }
